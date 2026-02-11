@@ -44,7 +44,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Create TenantAspect to enforce tenant_id on all repository queries
     - _Requirements: 1.4, 1.7_
   
-  - [ ]* 3.2 Write property test for tenant data isolation
+  - [x] 3.2 Write property test for tenant data isolation
     - **Property 1: Tenant Data Isolation**
     - **Validates: Requirements 1.4**
   
