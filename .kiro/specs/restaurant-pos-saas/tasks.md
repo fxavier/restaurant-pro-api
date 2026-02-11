@@ -38,7 +38,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - _Requirements: 1.5_
 
 - [ ] 3. Tenant context and multi-tenancy infrastructure
-  - [ ] 3.1 Implement TenantContext thread-local holder
+  - [x] 3.1 Implement TenantContext thread-local holder
     - Create TenantContext class with setTenantId/getTenantId/clear methods
     - Create TenantContextFilter to extract tenant from JWT and set context
     - Create TenantAspect to enforce tenant_id on all repository queries
