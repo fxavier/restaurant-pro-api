@@ -147,7 +147,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Validates: Requirements 1.8**
 
 - [ ] 8. Dining room module
-  - [ ] 8.1 Create DiningTable and BlacklistEntry entities
+  - [x] 8.1 Create DiningTable and BlacklistEntry entities
     - Define DiningTable JPA entity: id, tenant_id, site_id, table_number, area, status, capacity, version
     - Define BlacklistEntry JPA entity: id, tenant_id, entity_type, entity_value, reason, blocked_at, created_by
     - Create repositories with tenant filtering
