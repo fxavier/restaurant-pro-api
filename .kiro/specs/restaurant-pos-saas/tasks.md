@@ -123,7 +123,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
 ### Phase 2: Core Domain Modules
 
 - [ ] 7. Tenant provisioning module
-  - [ ] 7.1 Create Tenant and Site entities
+  - [x] 7.1 Create Tenant and Site entities
     - Define Tenant JPA entity: id, name, subscription_plan, status, created_at, updated_at
     - Define Site JPA entity: id, tenant_id, name, address, timezone, settings (JSONB), created_at, updated_at
     - Create TenantRepository and SiteRepository
