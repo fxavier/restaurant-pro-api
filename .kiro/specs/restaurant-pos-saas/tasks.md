@@ -32,7 +32,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Add indexes: tables by tenant+site+status, orders by tenant+table+status, customers by tenant+phone (including varchar_pattern_ops for suffix search), cash_sessions by tenant+register+status, print_jobs by tenant+printer+status, payments by tenant+idempotency_key
     - _Requirements: 15.4, 15.5_
   
-  - [ ] 2.3 Create V3__rls_policies.sql (optional RLS)
+  - [x] 2.3 Create V3__rls_policies.sql (optional RLS)
     - Enable RLS on all domain tables
     - Create tenant_isolation_policy for each table using current_setting('app.tenant_id')
     - _Requirements: 1.5_
