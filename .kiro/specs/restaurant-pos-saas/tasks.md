@@ -28,7 +28,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Define enums via CHECK constraints: table status, order status, payment method, printer status, etc.
     - _Requirements: 1.2, 1.3, 16.4_
   
-  - [ ] 2.2 Create V2__indexes.sql for hot path optimization
+  - [x] 2.2 Create V2__indexes.sql for hot path optimization
     - Add indexes: tables by tenant+site+status, orders by tenant+table+status, customers by tenant+phone (including varchar_pattern_ops for suffix search), cash_sessions by tenant+register+status, print_jobs by tenant+printer+status, payments by tenant+idempotency_key
     - _Requirements: 15.4, 15.5_
   
