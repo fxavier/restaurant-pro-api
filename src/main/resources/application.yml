@@ -39,6 +39,12 @@ spring:
       name: admin
       password: admin
 
+# JWT configuration
+jwt:
+  secret-key: ${JWT_SECRET_KEY:your-256-bit-secret-key-change-this-in-production-environment-minimum-32-characters}
+  access-token-expiry-minutes: 15
+  refresh-token-expiry-days: 7
+
 # Logging configuration
 logging:
   level:
