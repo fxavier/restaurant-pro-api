@@ -114,7 +114,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Property 7: Permission Enforcement**
     - **Validates: Requirements 2.5**
 
-- [ ] 6. Checkpoint - Foundation complete
+- [x] 6. Checkpoint - Foundation complete
   - Ensure all tests pass
   - Verify database migrations apply successfully
   - Verify JWT authentication works end-to-end
