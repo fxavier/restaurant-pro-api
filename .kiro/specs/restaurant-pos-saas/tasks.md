@@ -78,11 +78,11 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - logout(refreshToken): revoke refresh token
     - _Requirements: 2.2, 2.3, 2.8_
   
-  - [ ]* 4.5 Write property test for JWT token contains tenant
+  - [x] 4.5 Write property test for JWT token contains tenant
     - **Property 3: JWT Token Contains Tenant**
     - **Validates: Requirements 1.6**
   
-  - [ ]* 4.6 Write property test for token issuance and expiry
+  - [x] 4.6 Write property test for token issuance and expiry
     - **Property 5: Token Issuance and Expiry**
     - **Validates: Requirements 2.2**
   
@@ -99,7 +99,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Validates: Requirements 2.8**
 
 - [ ] 5. Role-based access control (RBAC)
-  - [ ] 5.1 Define Permission enum and role mappings
+  - [x] 5.1 Define Permission enum and role mappings
     - Create Permission enum: VOID_AFTER_SUBTOTAL, APPLY_DISCOUNT, REPRINT_DOCUMENT, REDIRECT_PRINTER, CLOSE_CASH, VOID_INVOICE
     - Create Role enum: ADMIN, MANAGER, CASHIER, WAITER, KITCHEN_STAFF with permission mappings
     - _Requirements: 2.4, 2.6_
