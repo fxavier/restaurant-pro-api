@@ -135,7 +135,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - updateTenantSettings(tenantId, settings): modify configuration
     - _Requirements: 1.8_
   
-  - [ ] 7.3 Create REST controllers for tenant management
+  - [x] 7.3 Create REST controllers for tenant management
     - POST /api/tenants: create tenant (admin only)
     - GET /api/tenants/{id}: get tenant details
     - POST /api/tenants/{id}/sites: create site

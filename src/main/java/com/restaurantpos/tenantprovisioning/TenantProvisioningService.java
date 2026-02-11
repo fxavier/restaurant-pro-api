@@ -103,6 +103,25 @@ public class TenantProvisioningService {
     }
     
     /**
+     * Gets tenant details by ID.
+     * 
+     * @param tenantId the tenant ID
+     * @return the tenant
+     * @throws IllegalArgumentException if tenant doesn't exist
+     * 
+     * Requirements: 1.8
+     */
+    @Transactional(readOnly = true)
+    public Tenant getTenant(UUID tenantId) {
+        if (tenantId == null) {
+            throw new IllegalArgumentException("Tenant ID cannot be null");
+        }
+        
+        return tenantRepository.findById(tenantId)
+            .orElseThrow(() -> new IllegalArgumentException("Tenant not found with ID: " + tenantId));
+    }
+    
+    /**
      * Updates tenant settings.
      * 
      * @param tenantId the tenant ID
