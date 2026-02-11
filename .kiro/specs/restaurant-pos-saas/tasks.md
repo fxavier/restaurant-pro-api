@@ -129,7 +129,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Create TenantRepository and SiteRepository
     - _Requirements: 1.1, 1.8_
   
-  - [ ] 7.2 Implement TenantProvisioningService
+  - [x] 7.2 Implement TenantProvisioningService
     - provisionTenant(name, plan): create tenant + default configuration in transaction
     - createSite(tenantId, siteDetails): add site to tenant
     - updateTenantSettings(tenantId, settings): modify configuration
