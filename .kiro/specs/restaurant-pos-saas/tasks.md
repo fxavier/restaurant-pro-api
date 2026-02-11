@@ -104,7 +104,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Create Role enum: ADMIN, MANAGER, CASHIER, WAITER, KITCHEN_STAFF with permission mappings
     - _Requirements: 2.4, 2.6_
   
-  - [ ] 5.2 Implement AuthorizationService
+  - [x] 5.2 Implement AuthorizationService
     - hasPermission(userId, permission): check user role and permission
     - requirePermission(permission): throw exception if not authorized
     - Create @RequirePermission annotation for method-level security
