@@ -20,7 +20,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
   - _Requirements: 16.1, 16.2_
 
 - [ ] 2. Database schema baseline migration
-  - [ ] 2.1 Create V1__baseline.sql with all core tables
+  - [x] 2.1 Create V1__baseline.sql with all core tables
     - Create tables: tenants, sites, users, refresh_tokens, dining_tables, blacklist_entries, families, subfamilies, items, orders, order_lines, consumptions, discounts, printers, print_jobs, payments, fiscal_documents, customers, cash_registers, cash_sessions, cash_movements, cash_closings
     - Add tenant_id, site_id columns to all domain tables
     - Add audit columns: created_at, created_by, updated_at, updated_by, version
