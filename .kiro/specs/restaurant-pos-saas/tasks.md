@@ -153,7 +153,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Create repositories with tenant filtering
     - _Requirements: 3.2, 3.6_
   
-  - [ ] 8.2 Implement TableManagementService
+  - [x] 8.2 Implement TableManagementService
     - getTableMap(siteId): return all tables with current status
     - openTable(tableId): transition to OCCUPIED
     - closeTable(tableId): transition to AVAILABLE
