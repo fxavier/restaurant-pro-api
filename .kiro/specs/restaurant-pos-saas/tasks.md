@@ -48,31 +48,31 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Property 1: Tenant Data Isolation**
     - **Validates: Requirements 1.4**
   
-  - [ ]* 3.3 Write property test for RLS enforcement (if RLS enabled)
+  - [x] 3.3 Write property test for RLS enforcement (if RLS enabled)
     - **Property 2: PostgreSQL RLS Enforcement**
     - **Validates: Requirements 1.5**
 
 
-- [ ] 4. JWT authentication and security foundation
-  - [ ] 4.1 Implement JWT token generation and validation
+- [x] 4. JWT authentication and security foundation
+  - [x] 4.1 Implement JWT token generation and validation
     - Create JwtTokenProvider with generateAccessToken, generateRefreshToken, validateToken, extractClaims methods
     - Include tenant_id in JWT claims
     - Configure token expiry: access 15min, refresh 7 days
     - _Requirements: 2.1, 2.2, 1.6_
   
-  - [ ] 4.2 Implement Spring Security configuration
+  - [x] 4.2 Implement Spring Security configuration
     - Create SecurityConfig with JWT filter chain
     - Configure authentication entry point and access denied handler
     - Set up password encoder (BCrypt with strength 12)
     - Configure CORS and CSRF protection
     - _Requirements: 2.7, 13.6_
   
-  - [ ] 4.3 Create User entity and repository
+  - [x] 4.3 Create User entity and repository
     - Define User JPA entity with tenant_id, username, password_hash, email, role, status, version
     - Create UserRepository extending JpaRepository with tenant filtering
     - _Requirements: 2.1_
   
-  - [ ] 4.4 Implement AuthenticationService
+  - [x] 4.4 Implement AuthenticationService
     - login(username, password): authenticate, generate tokens, return AuthResponse
     - refreshToken(refreshToken): validate, issue new access token
     - logout(refreshToken): revoke refresh token
