@@ -99,6 +99,35 @@ public class CatalogManagementService {
     }
     
     /**
+     * Updates an existing item.
+     * 
+     * @param itemId the item ID
+     * @param itemDetails the updated item details
+     * @return the updated item
+     * @throws IllegalArgumentException if item not found
+     */
+    public Item updateItem(UUID itemId, ItemDetails itemDetails) {
+        if (itemId == null) {
+            throw new IllegalArgumentException("Item ID cannot be null");
+        }
+        
+        Item item = itemRepository.findById(itemId)
+            .orElseThrow(() -> new IllegalArgumentException("Item not found"));
+        
+        // Update fields
+        item.setName(itemDetails.name());
+        if (itemDetails.description() != null) {
+            item.setDescription(itemDetails.description());
+        }
+        item.setBasePrice(itemDetails.basePrice());
+        if (itemDetails.imageUrl() != null) {
+            item.setImageUrl(itemDetails.imageUrl());
+        }
+        
+        return itemRepository.save(item);
+    }
+    
+    /**
      * Updates the availability status of an item.
      * 
      * @param itemId the item ID

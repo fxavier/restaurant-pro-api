@@ -204,7 +204,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - getMenuStructure(tenantId, siteId): return full hierarchy
     - _Requirements: 4.1, 4.3_
   
-  - [ ] 9.3 Create REST controllers for catalog
+  - [x] 9.3 Create REST controllers for catalog
     - GET /api/catalog/menu: get menu structure
     - POST /api/catalog/families: create family
     - POST /api/catalog/items: create item
