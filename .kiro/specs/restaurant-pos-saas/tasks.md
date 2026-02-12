@@ -197,7 +197,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Create repositories with tenant filtering
     - _Requirements: 4.1, 4.2_
   
-  - [ ] 9.2 Implement CatalogManagementService
+  - [x] 9.2 Implement CatalogManagementService
     - createFamily(tenantId, familyDetails): add family
     - createItem(tenantId, itemDetails): add item
     - updateItemAvailability(itemId, available): toggle availability
