@@ -1,5 +1,8 @@
 package com.restaurantpos.identityaccess;
 
+import com.restaurantpos.identityaccess.tenant.TenantAware;
+import com.restaurantpos.identityaccess.tenant.TenantContext;
+import com.restaurantpos.identityaccess.tenant.TenantContextFilter;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -52,7 +55,7 @@ class TenantContextFilterTest {
         UUID tenantId = UUID.randomUUID();
         request.addHeader("X-Tenant-ID", tenantId.toString());
         
-        filter.doFilterInternal(request, response, filterChain);
+        filter.doFilter(request, response, filterChain);
         
         verify(filterChain).doFilter(request, response);
         // Tenant context is cleared after filter chain, so we can't assert it here
@@ -67,7 +70,7 @@ class TenantContextFilterTest {
             new UsernamePasswordAuthenticationToken(principal, null)
         );
         
-        filter.doFilterInternal(request, response, filterChain);
+        filter.doFilter(request, response, filterChain);
         
         verify(filterChain).doFilter(request, response);
     }
@@ -83,7 +86,7 @@ class TenantContextFilterTest {
             return null;
         }).when(filterChain).doFilter(request, response);
         
-        filter.doFilterInternal(request, response, filterChain);
+        filter.doFilter(request, response, filterChain);
         
         // After filter completes, tenant context should be cleared
         assertNull(TenantContext.getTenantId());
@@ -98,7 +101,7 @@ class TenantContextFilterTest {
             .when(filterChain).doFilter(request, response);
         
         assertThrows(ServletException.class, () -> 
-            filter.doFilterInternal(request, response, filterChain)
+            filter.doFilter(request, response, filterChain)
         );
         
         // Tenant context should still be cleared
@@ -107,7 +110,7 @@ class TenantContextFilterTest {
     
     @Test
     void doFilterInternal_shouldHandleNoTenantId() throws ServletException, IOException {
-        filter.doFilterInternal(request, response, filterChain);
+        filter.doFilter(request, response, filterChain);
         
         verify(filterChain).doFilter(request, response);
         assertNull(TenantContext.getTenantId());
@@ -117,7 +120,7 @@ class TenantContextFilterTest {
     void doFilterInternal_shouldHandleInvalidTenantIdFormat() throws ServletException, IOException {
         request.addHeader("X-Tenant-ID", "invalid-uuid");
         
-        filter.doFilterInternal(request, response, filterChain);
+        filter.doFilter(request, response, filterChain);
         
         verify(filterChain).doFilter(request, response);
         assertNull(TenantContext.getTenantId());

@@ -18,7 +18,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.restaurantpos.identityaccess.TenantContext;
+import com.restaurantpos.diningroom.entity.BlacklistEntry;
+import com.restaurantpos.diningroom.entity.DiningTable;
+import com.restaurantpos.diningroom.model.EntityType;
+import com.restaurantpos.diningroom.model.TableStatus;
+import com.restaurantpos.diningroom.repository.BlacklistEntryRepository;
+import com.restaurantpos.diningroom.repository.DiningTableRepository;
+import com.restaurantpos.diningroom.service.TableManagementService;
+import com.restaurantpos.identityaccess.tenant.TenantContext;
+
 
 /**
  * Unit tests for TableManagementService.

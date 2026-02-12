@@ -162,7 +162,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - unblockTable(tableId): remove from blacklist
     - _Requirements: 3.1, 3.4, 3.5, 3.6, 3.8_
   
-  - [ ] 8.3 Create REST controllers for table operations
+  - [x] 8.3 Create REST controllers for table operations
     - GET /api/tables: get table map
     - POST /api/tables/{id}/open: open table
     - POST /api/tables/{id}/close: close table
