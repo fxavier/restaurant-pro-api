@@ -189,7 +189,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
 
 
 - [ ] 9. Catalog module
-  - [ ] 9.1 Create catalog entities
+  - [x] 9.1 Create catalog entities
     - Define Family JPA entity: id, tenant_id, name, display_order, active
     - Define Subfamily JPA entity: id, tenant_id, family_id, name, display_order, active
     - Define Item JPA entity: id, tenant_id, subfamily_id, name, description, base_price, available, image_url
