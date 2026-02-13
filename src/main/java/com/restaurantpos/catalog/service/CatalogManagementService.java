@@ -1,12 +1,14 @@
 package com.restaurantpos.catalog.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.restaurantpos.catalog.api.CatalogService;
 import com.restaurantpos.catalog.dto.FamilyDetails;
 import com.restaurantpos.catalog.dto.ItemDetails;
 import com.restaurantpos.catalog.dto.MenuStructure;
@@ -24,7 +26,7 @@ import com.restaurantpos.catalog.repository.SubfamilyRepository;
  */
 @Service
 @Transactional
-public class CatalogManagementService {
+public class CatalogManagementService implements CatalogService {
     
     private final FamilyRepository familyRepository;
     private final SubfamilyRepository subfamilyRepository;
@@ -216,5 +218,26 @@ public class CatalogManagementService {
             subfamily.getActive(),
             itemNodes
         );
+    }
+    
+    /**
+     * Gets an item by ID with tenant isolation.
+     * This method is part of the public API for cross-module communication.
+     * 
+     * @param itemId the item ID
+     * @param tenantId the tenant ID
+     * @return the item info if found
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<CatalogService.ItemInfo> getItem(UUID itemId, UUID tenantId) {
+        return itemRepository.findByIdAndTenantId(itemId, tenantId)
+            .map(item -> new CatalogService.ItemInfo(
+                item.getId(),
+                item.getTenantId(),
+                item.getName(),
+                item.getBasePrice(),
+                item.isAvailable()
+            ));
     }
 }

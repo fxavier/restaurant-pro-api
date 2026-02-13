@@ -6,6 +6,8 @@
  * - Role-based access control (RBAC)
  * - User management
  * - Tenant context management
+ * 
+ * Public API: identityaccess.api package
  */
 @org.springframework.modulith.ApplicationModule(
     displayName = "Identity and Access"

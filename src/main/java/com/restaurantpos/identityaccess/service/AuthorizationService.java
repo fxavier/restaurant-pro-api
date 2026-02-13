@@ -1,14 +1,16 @@
 package com.restaurantpos.identityaccess.service;
 
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.restaurantpos.identityaccess.api.AuthorizationApi;
 import com.restaurantpos.identityaccess.entity.User;
 import com.restaurantpos.identityaccess.exception.AuthorizationException;
 import com.restaurantpos.identityaccess.model.Permission;
 import com.restaurantpos.identityaccess.repository.UserRepository;
 import com.restaurantpos.identityaccess.tenant.TenantContext;
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service for handling authorization and permission checks.
@@ -18,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional(readOnly = true)
-public class AuthorizationService {
+public class AuthorizationService implements AuthorizationApi {
     
     private final UserRepository userRepository;
     
@@ -76,5 +78,28 @@ public class AuthorizationService {
             throw new AuthorizationException("No tenant context set for current request");
         }
         return tenantId;
+    }
+    
+    // API implementation methods
+    
+    @Override
+    public boolean hasPermission(UUID userId, PermissionType permissionType) {
+        return hasPermission(userId, convertToPermission(permissionType));
+    }
+    
+    @Override
+    public void requirePermission(UUID userId, PermissionType permissionType) {
+        requirePermission(userId, convertToPermission(permissionType));
+    }
+    
+    private Permission convertToPermission(PermissionType permissionType) {
+        return switch (permissionType) {
+            case VOID_AFTER_SUBTOTAL -> Permission.VOID_AFTER_SUBTOTAL;
+            case APPLY_DISCOUNT -> Permission.APPLY_DISCOUNT;
+            case REPRINT_DOCUMENT -> Permission.REPRINT_DOCUMENT;
+            case REDIRECT_PRINTER -> Permission.REDIRECT_PRINTER;
+            case CLOSE_CASH -> Permission.CLOSE_CASH;
+            case VOID_INVOICE -> Permission.VOID_INVOICE;
+        };
     }
 }
