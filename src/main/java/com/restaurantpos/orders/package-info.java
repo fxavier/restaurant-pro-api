@@ -8,6 +8,7 @@
  * - Order transfer between tables
  */
 @org.springframework.modulith.ApplicationModule(
-    displayName = "Orders"
+    displayName = "Orders",
+    allowedDependencies = {"identityaccess::api", "catalog::api"}
 )
 package com.restaurantpos.orders;

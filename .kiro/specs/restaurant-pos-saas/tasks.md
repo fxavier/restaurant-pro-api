@@ -189,7 +189,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
 
 
 - [ ] 9. Catalog module
-  - [ ] 9.1 Create catalog entities
+  - [x] 9.1 Create catalog entities
     - Define Family JPA entity: id, tenant_id, name, display_order, active
     - Define Subfamily JPA entity: id, tenant_id, family_id, name, display_order, active
     - Define Item JPA entity: id, tenant_id, subfamily_id, name, description, base_price, available, image_url
@@ -197,14 +197,14 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Create repositories with tenant filtering
     - _Requirements: 4.1, 4.2_
   
-  - [ ] 9.2 Implement CatalogManagementService
+  - [x] 9.2 Implement CatalogManagementService
     - createFamily(tenantId, familyDetails): add family
     - createItem(tenantId, itemDetails): add item
     - updateItemAvailability(itemId, available): toggle availability
     - getMenuStructure(tenantId, siteId): return full hierarchy
     - _Requirements: 4.1, 4.3_
   
-  - [ ] 9.3 Create REST controllers for catalog
+  - [x] 9.3 Create REST controllers for catalog
     - GET /api/catalog/menu: get menu structure
     - POST /api/catalog/families: create family
     - POST /api/catalog/items: create item
@@ -221,7 +221,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Validates: Requirements 4.6**
 
 - [ ] 10. Orders module
-  - [ ] 10.1 Create order entities
+  - [x] 10.1 Create order entities
     - Define Order JPA entity: id, tenant_id, site_id, table_id, customer_id, order_type, status, total_amount, version
     - Define OrderLine JPA entity: id, order_id, item_id, quantity, unit_price, modifiers (JSONB), notes, status, version
     - Define Consumption JPA entity: id, tenant_id, order_line_id, quantity, confirmed_at, voided_at
@@ -229,7 +229,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Create repositories with tenant filtering and optimistic locking
     - _Requirements: 5.1, 5.2, 5.4, 5.7, 5.9_
   
-  - [ ] 10.2 Implement OrderService
+  - [x] 10.2 Implement OrderService
     - createOrder(tableId, orderType): create new order
     - addOrderLine(orderId, itemId, quantity, modifiers): add item to order
     - updateOrderLine(orderLineId, quantity, modifiers): modify line
@@ -239,7 +239,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - getOrdersByTable(tableId): get all orders for table
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.6, 5.7_
   
-  - [ ] 10.3 Create REST controllers for orders
+  - [x] 10.3 Create REST controllers for orders
     - POST /api/orders: create order
     - GET /api/orders/{id}: get order details
     - POST /api/orders/{id}/lines: add order line
