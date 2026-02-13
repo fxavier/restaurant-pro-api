@@ -266,7 +266,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Property 19: Optimistic Locking Conflict Detection**
     - **Validates: Requirements 5.9**
 
-- [ ] 11. Checkpoint - Core domain complete
+- [x] 11. Checkpoint - Core domain complete
   - Ensure all tests pass
   - Verify order flow: create → add lines → confirm → consumptions created
   - Verify table state transitions work correctly
