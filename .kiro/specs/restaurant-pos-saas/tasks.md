@@ -292,14 +292,14 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Call createPrintJobs(orderId) to generate print jobs
     - _Requirements: 6.1_
   
-  - [ ] 12.4 Implement PrinterManagementService
+  - [x] 12.4 Implement PrinterManagementService
     - updatePrinterStatus(printerId, status): change printer state
     - redirectPrinter(printerId, targetPrinterId): set redirect
     - testPrinter(printerId): send test print
     - listPrinters(siteId): get all printers with status
     - _Requirements: 11.1, 11.2, 11.3, 11.4_
   
-  - [ ] 12.5 Create REST controllers for printing
+  - [x] 12.5 Create REST controllers for printing
     - GET /api/printers: list printers
     - PUT /api/printers/{id}/status: update printer status
     - POST /api/printers/{id}/redirect: set redirect
