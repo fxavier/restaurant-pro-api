@@ -287,7 +287,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - processPrintJob(printJobId): send to printer (handle REDIRECT, IGNORE states)
     - _Requirements: 6.1, 6.2, 6.4, 6.5, 6.6_
   
-  - [ ] 12.3 Implement OrderConfirmed event listener
+  - [x] 12.3 Implement OrderConfirmed event listener
     - Listen to OrderConfirmed event from orders module
     - Call createPrintJobs(orderId) to generate print jobs
     - _Requirements: 6.1_
