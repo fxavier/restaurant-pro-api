@@ -1,5 +1,6 @@
 package com.restaurantpos.identityaccess;
 
+import com.restaurantpos.identityaccess.tenant.TenantContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

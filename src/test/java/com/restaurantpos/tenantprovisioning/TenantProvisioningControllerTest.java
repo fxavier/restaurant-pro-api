@@ -1,5 +1,12 @@
 package com.restaurantpos.tenantprovisioning;
 
+import com.restaurantpos.tenantprovisioning.controller.TenantProvisioningController;
+import com.restaurantpos.tenantprovisioning.entity.Site;
+import com.restaurantpos.tenantprovisioning.entity.Tenant;
+import com.restaurantpos.tenantprovisioning.model.TenantStatus;
+import com.restaurantpos.tenantprovisioning.service.TenantProvisioningService;
+import com.restaurantpos.tenantprovisioning.service.TenantProvisioningService.SiteDetails;
+import com.restaurantpos.tenantprovisioning.service.TenantProvisioningService.TenantSettings;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -18,8 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.restaurantpos.tenantprovisioning.TenantProvisioningService.SiteDetails;
-import com.restaurantpos.tenantprovisioning.TenantProvisioningService.TenantSettings;
 
 /**
  * Unit tests for TenantProvisioningController.
