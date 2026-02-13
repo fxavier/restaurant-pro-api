@@ -275,7 +275,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
 ### Phase 3: Kitchen, Payments, and Cash
 
 - [ ] 12. Kitchen and printing module
-  - [ ] 12.1 Create printer and print job entities
+  - [x] 12.1 Create printer and print job entities
     - Define Printer JPA entity: id, tenant_id, site_id, name, ip_address, zone, status, redirect_to_printer_id
     - Define PrintJob JPA entity: id, tenant_id, order_id, printer_id, content, status, dedupe_key
     - Create repositories with tenant filtering
