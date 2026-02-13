@@ -266,7 +266,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Property 19: Optimistic Locking Conflict Detection**
     - **Validates: Requirements 5.9**
 
-- [ ] 11. Checkpoint - Core domain complete
+- [x] 11. Checkpoint - Core domain complete
   - Ensure all tests pass
   - Verify order flow: create → add lines → confirm → consumptions created
   - Verify table state transitions work correctly
@@ -275,7 +275,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
 ### Phase 3: Kitchen, Payments, and Cash
 
 - [ ] 12. Kitchen and printing module
-  - [ ] 12.1 Create printer and print job entities
+  - [x] 12.1 Create printer and print job entities
     - Define Printer JPA entity: id, tenant_id, site_id, name, ip_address, zone, status, redirect_to_printer_id
     - Define PrintJob JPA entity: id, tenant_id, order_id, printer_id, content, status, dedupe_key
     - Create repositories with tenant filtering
