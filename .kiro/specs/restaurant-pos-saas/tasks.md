@@ -281,7 +281,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Create repositories with tenant filtering
     - _Requirements: 6.1, 6.3, 6.7_
   
-  - [ ] 12.2 Implement PrintingService
+  - [x] 12.2 Implement PrintingService
     - createPrintJobs(orderId): generate jobs for confirmed order based on item categories and zones
     - reprintOrder(orderId, printerId): manually reprint with permission check
     - processPrintJob(printJobId): send to printer (handle REDIRECT, IGNORE states)
