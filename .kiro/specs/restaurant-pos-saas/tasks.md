@@ -329,21 +329,21 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
 
 
 - [ ] 13. Payments and billing module
-  - [ ] 13.1 Create payment and fiscal document entities
+  - [x] 13.1 Create payment and fiscal document entities
     - Define Payment JPA entity: id, tenant_id, order_id, amount, payment_method, status, idempotency_key, terminal_transaction_id, version
     - Define FiscalDocument JPA entity: id, tenant_id, site_id, document_type, document_number, order_id, amount, customer_nif, issued_at, voided_at
     - Define PaymentCardBlacklist JPA entity: id, tenant_id, card_last_four, reason, blocked_at
     - Create repositories with tenant filtering and unique constraints
     - _Requirements: 7.1, 7.2, 7.6, 7.10_
   
-  - [ ] 13.2 Implement PaymentService
+  - [x] 13.2 Implement PaymentService
     - processPayment(orderId, amount, method, idempotencyKey): process payment with idempotency
     - voidPayment(paymentId, reason): cancel payment with permission check and audit
     - getOrderPayments(orderId): get all payments for order
     - calculateChange(orderTotal, paymentAmount): calculate change for cash
     - _Requirements: 7.1, 7.2, 7.8, 7.9_
   
-  - [ ] 13.3 Implement BillingService
+  - [x] 13.3 Implement BillingService
     - generateFiscalDocument(orderId, documentType, customerNif): create invoice/receipt with sequential numbering
     - voidFiscalDocument(documentId, reason): void document with permission check and audit
     - printSubtotal(orderId): print intermediate bill
