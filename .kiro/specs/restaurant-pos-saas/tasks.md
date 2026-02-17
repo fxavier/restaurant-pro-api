@@ -489,7 +489,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Property 38: Cash Report Completeness**
     - **Validates: Requirements 10.8**
 
-- [ ] 16. Checkpoint - Core functionality complete
+- [x] 16. Checkpoint - Core functionality complete
   - Ensure all tests pass
   - Verify complete order flow: open table → add lines → confirm → print jobs → payment → cash movement → close order
   - Verify cash session lifecycle works correctly
