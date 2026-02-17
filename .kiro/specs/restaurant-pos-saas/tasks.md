@@ -356,7 +356,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Emit PaymentCompleted event for cash tracking
     - _Requirements: 7.5_
   
-  - [ ] 13.5 Create REST controllers for payments and billing
+  - [x] 13.5 Create REST controllers for payments and billing
     - POST /api/payments: process payment
     - POST /api/payments/{id}/void: void payment
     - GET /api/orders/{orderId}/payments: get order payments
