@@ -449,12 +449,12 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - getSessionSummary(sessionId): get session with all movements
     - _Requirements: 10.2, 10.3, 10.5, 10.6_
   
-  - [ ] 15.3 Implement PaymentCompleted event listener
+  - [x] 15.3 Implement PaymentCompleted event listener
     - Listen to PaymentCompleted event from payments module
     - Create cash movement record for CASH payments
     - _Requirements: 10.4_
   
-  - [ ] 15.4 Implement CashClosingService
+  - [x] 15.4 Implement CashClosingService
     - closeRegister(registerId, periodStart, periodEnd): close register
     - closeDay(siteId, date): close day
     - closeFinancialPeriod(tenantId, periodStart, periodEnd): close period

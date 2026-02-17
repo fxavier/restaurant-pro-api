@@ -72,4 +72,13 @@ public interface CashMovementRepository extends JpaRepository<CashMovement, UUID
      * @return true if movement exists
      */
     boolean existsByTenantIdAndPaymentId(UUID tenantId, UUID paymentId);
+    
+    /**
+     * Finds all cash movements for multiple sessions.
+     * 
+     * @param tenantId the tenant ID
+     * @param sessionIds the list of session IDs
+     * @return list of cash movements
+     */
+    List<CashMovement> findByTenantIdAndSessionIdIn(UUID tenantId, List<UUID> sessionIds);
 }
