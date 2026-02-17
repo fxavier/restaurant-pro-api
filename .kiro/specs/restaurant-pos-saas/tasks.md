@@ -350,7 +350,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - splitBill(orderId, splitCount): divide order for split payment
     - _Requirements: 7.6, 7.7, 7.8_
   
-  - [ ] 13.4 Implement order closure logic
+  - [x] 13.4 Implement order closure logic
     - After each payment, check if sum of payments >= order total
     - If fully paid, transition order to CLOSED status
     - Emit PaymentCompleted event for cash tracking
