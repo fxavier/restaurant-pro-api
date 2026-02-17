@@ -399,7 +399,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Validates: Requirements 7.9**
 
 - [ ] 14. Customers module
-  - [ ] 14.1 Create Customer entity
+  - [x] 14.1 Create Customer entity
     - Define Customer JPA entity: id, tenant_id, name, phone, address, delivery_notes
     - Create CustomerRepository with phone search methods (full and suffix)
     - Add index for phone suffix search (varchar_pattern_ops)
