@@ -405,7 +405,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Add index for phone suffix search (varchar_pattern_ops)
     - _Requirements: 8.1, 8.5_
   
-  - [ ] 14.2 Implement CustomerService
+  - [x] 14.2 Implement CustomerService
     - searchByPhone(phone): search by full phone number
     - searchByPhoneSuffix(suffix): search by last N digits using LIKE '%suffix'
     - createCustomer(tenantId, customerDetails): create new customer
