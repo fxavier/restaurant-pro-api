@@ -434,7 +434,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Validates: Requirements 8.4**
 
 - [ ] 15. Cash register module
-  - [ ] 15.1 Create cash register entities
+  - [x] 15.1 Create cash register entities
     - Define CashRegister JPA entity: id, tenant_id, site_id, register_number, status
     - Define CashSession JPA entity: id, tenant_id, register_id, employee_id, opening_amount, expected_close, actual_close, variance, status, opened_at, closed_at, version
     - Define CashMovement JPA entity: id, tenant_id, session_id, movement_type, amount, reason, payment_id, created_at, created_by
