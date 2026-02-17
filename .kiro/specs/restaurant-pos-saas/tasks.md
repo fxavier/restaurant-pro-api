@@ -454,7 +454,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Create cash movement record for CASH payments
     - _Requirements: 10.4_
   
-  - [ ] 15.4 Implement CashClosingService
+  - [x] 15.4 Implement CashClosingService
     - closeRegister(registerId, periodStart, periodEnd): close register
     - closeDay(siteId, date): close day
     - closeFinancialPeriod(tenantId, periodStart, periodEnd): close period

@@ -85,4 +85,36 @@ public interface CashSessionRepository extends JpaRepository<CashSession, UUID> 
      * @return the open session if found
      */
     Optional<CashSession> findFirstByTenantIdAndRegisterIdAndStatusOrderByOpenedAtDesc(UUID tenantId, UUID registerId, CashSessionStatus status);
+    
+    /**
+     * Finds all cash sessions for a register within a date range.
+     * 
+     * @param tenantId the tenant ID
+     * @param registerId the register ID
+     * @param startDate the start date
+     * @param endDate the end date
+     * @return list of cash sessions
+     */
+    List<CashSession> findByTenantIdAndRegisterIdAndOpenedAtBetween(UUID tenantId, UUID registerId, Instant startDate, Instant endDate);
+    
+    /**
+     * Finds all cash sessions for multiple registers within a date range.
+     * 
+     * @param tenantId the tenant ID
+     * @param registerIds the list of register IDs
+     * @param startDate the start date
+     * @param endDate the end date
+     * @return list of cash sessions
+     */
+    List<CashSession> findByTenantIdAndRegisterIdInAndOpenedAtBetween(UUID tenantId, List<UUID> registerIds, Instant startDate, Instant endDate);
+    
+    /**
+     * Finds all cash sessions for a tenant within a date range.
+     * 
+     * @param tenantId the tenant ID
+     * @param startDate the start date
+     * @param endDate the end date
+     * @return list of cash sessions
+     */
+    List<CashSession> findByTenantIdAndOpenedAtBetween(UUID tenantId, Instant startDate, Instant endDate);
 }
