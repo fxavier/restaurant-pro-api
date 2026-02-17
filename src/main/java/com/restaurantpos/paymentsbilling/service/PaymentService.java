@@ -1,9 +1,11 @@
 package com.restaurantpos.paymentsbilling.service;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,7 @@ import com.restaurantpos.orders.entity.Order;
 import com.restaurantpos.orders.model.OrderStatus;
 import com.restaurantpos.orders.repository.OrderRepository;
 import com.restaurantpos.paymentsbilling.entity.Payment;
+import com.restaurantpos.paymentsbilling.event.PaymentCompleted;
 import com.restaurantpos.paymentsbilling.model.PaymentMethod;
 import com.restaurantpos.paymentsbilling.model.PaymentStatus;
 import com.restaurantpos.paymentsbilling.repository.PaymentRepository;
@@ -21,7 +24,7 @@ import com.restaurantpos.paymentsbilling.repository.PaymentRepository;
  * Service for payment processing operations.
  * Handles payment creation, voiding, and order payment queries.
  * 
- * Requirements: 7.1, 7.2, 7.8, 7.9
+ * Requirements: 7.1, 7.2, 7.5, 7.8, 7.9
  */
 @Service
 public class PaymentService {
@@ -29,20 +32,24 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
     private final AuthorizationApi authorizationApi;
+    private final ApplicationEventPublisher eventPublisher;
     
     public PaymentService(
             PaymentRepository paymentRepository,
             OrderRepository orderRepository,
-            AuthorizationApi authorizationApi) {
+            AuthorizationApi authorizationApi,
+            ApplicationEventPublisher eventPublisher) {
         this.paymentRepository = paymentRepository;
         this.orderRepository = orderRepository;
         this.authorizationApi = authorizationApi;
+        this.eventPublisher = eventPublisher;
     }
     
     /**
      * Processes a payment for an order with idempotency support.
      * If a payment with the same idempotency key already exists, returns the existing payment.
      * After successful payment, checks if order is fully paid and closes it if so.
+     * Emits PaymentCompleted event for cash tracking.
      * 
      * @param orderId the order ID
      * @param amount the payment amount
@@ -51,7 +58,7 @@ public class PaymentService {
      * @return the created or existing payment
      * @throws IllegalArgumentException if order not found or amount is invalid
      * 
-     * Requirements: 7.1, 7.2
+     * Requirements: 7.1, 7.2, 7.5
      */
     @Transactional
     public Payment processPayment(UUID orderId, BigDecimal amount, PaymentMethod method, String idempotencyKey) {
@@ -81,6 +88,17 @@ public class PaymentService {
         Payment payment = new Payment(tenantId, orderId, amount, method, idempotencyKey);
         payment.setStatus(PaymentStatus.COMPLETED);
         payment = paymentRepository.save(payment);
+        
+        // Emit PaymentCompleted event for cash tracking
+        eventPublisher.publishEvent(new PaymentCompleted(
+                payment.getId(),
+                orderId,
+                tenantId,
+                order.getSiteId(),
+                amount,
+                method,
+                Instant.now()
+        ));
         
         // Check if order is fully paid and close if so
         checkAndCloseOrder(order, tenantId, orderId);

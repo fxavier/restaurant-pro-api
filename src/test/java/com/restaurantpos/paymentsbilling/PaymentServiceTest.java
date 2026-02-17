@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -48,7 +47,6 @@ class PaymentServiceTest {
     @Mock
     private AuthorizationApi authorizationApi;
     
-    @InjectMocks
     private PaymentService paymentService;
     
     private UUID tenantId;
@@ -66,6 +64,14 @@ class PaymentServiceTest {
         paymentId = UUID.randomUUID();
         userId = UUID.randomUUID();
         idempotencyKey = "payment-" + UUID.randomUUID();
+        
+        // Create PaymentService with a no-op event publisher
+        paymentService = new PaymentService(
+            paymentRepository,
+            orderRepository,
+            authorizationApi,
+            event -> {} // No-op event publisher for unit tests
+        );
     }
     
     @Test
@@ -82,7 +88,18 @@ class PaymentServiceTest {
         when(orderRepository.findByIdAndTenantId(orderId, tenantId))
             .thenReturn(Optional.of(order));
         when(paymentRepository.save(any(Payment.class)))
-            .thenAnswer(invocation -> invocation.getArgument(0));
+            .thenAnswer(invocation -> {
+                Payment p = invocation.getArgument(0);
+                // Simulate JPA setting the ID
+                try {
+                    var idField = Payment.class.getDeclaredField("id");
+                    idField.setAccessible(true);
+                    idField.set(p, UUID.randomUUID());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                return p;
+            });
         when(paymentRepository.findByTenantIdAndOrderIdAndStatus(tenantId, orderId, PaymentStatus.COMPLETED))
             .thenReturn(List.of());
         
@@ -91,6 +108,7 @@ class PaymentServiceTest {
         
         // Then
         assertNotNull(payment);
+        assertNotNull(payment.getId());
         assertEquals(tenantId, payment.getTenantId());
         assertEquals(orderId, payment.getOrderId());
         assertEquals(amount, payment.getAmount());
@@ -222,9 +240,30 @@ class PaymentServiceTest {
         when(orderRepository.findByIdAndTenantId(orderId, tenantId))
             .thenReturn(Optional.of(order));
         when(paymentRepository.save(any(Payment.class)))
-            .thenReturn(newPayment);
+            .thenAnswer(invocation -> {
+                Payment p = invocation.getArgument(0);
+                // Simulate JPA setting the ID
+                try {
+                    var idField = Payment.class.getDeclaredField("id");
+                    idField.setAccessible(true);
+                    idField.set(p, UUID.randomUUID());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                return p;
+            });
         when(paymentRepository.findByTenantIdAndOrderIdAndStatus(tenantId, orderId, PaymentStatus.COMPLETED))
-            .thenReturn(List.of(newPayment));
+            .thenAnswer(invocation -> {
+                // Simulate JPA setting the ID on newPayment
+                try {
+                    var idField = Payment.class.getDeclaredField("id");
+                    idField.setAccessible(true);
+                    idField.set(newPayment, UUID.randomUUID());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                return List.of(newPayment);
+            });
         
         // When
         paymentService.processPayment(orderId, amount, PaymentMethod.CASH, idempotencyKey);
@@ -251,9 +290,30 @@ class PaymentServiceTest {
         when(orderRepository.findByIdAndTenantId(orderId, tenantId))
             .thenReturn(Optional.of(order));
         when(paymentRepository.save(any(Payment.class)))
-            .thenReturn(newPayment);
+            .thenAnswer(invocation -> {
+                Payment p = invocation.getArgument(0);
+                // Simulate JPA setting the ID
+                try {
+                    var idField = Payment.class.getDeclaredField("id");
+                    idField.setAccessible(true);
+                    idField.set(p, UUID.randomUUID());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                return p;
+            });
         when(paymentRepository.findByTenantIdAndOrderIdAndStatus(tenantId, orderId, PaymentStatus.COMPLETED))
-            .thenReturn(List.of(newPayment));
+            .thenAnswer(invocation -> {
+                // Simulate JPA setting the ID on newPayment
+                try {
+                    var idField = Payment.class.getDeclaredField("id");
+                    idField.setAccessible(true);
+                    idField.set(newPayment, UUID.randomUUID());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                return List.of(newPayment);
+            });
         
         // When
         paymentService.processPayment(orderId, amount, PaymentMethod.CASH, idempotencyKey);
