@@ -5,6 +5,10 @@ import java.util.UUID;
 
 import com.restaurantpos.orders.model.DiscountType;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
 /**
  * DTO for discount application details.
  * 
@@ -12,19 +16,17 @@ import com.restaurantpos.orders.model.DiscountType;
  */
 public record DiscountDetails(
     UUID orderLineId,  // null for order-level discount
+    
+    @NotNull(message = "Discount type is required")
     DiscountType type,
+    
+    @NotNull(message = "Discount amount is required")
+    @Positive(message = "Discount amount must be positive")
     BigDecimal amount,
+    
+    @Size(max = 500, message = "Reason must not exceed 500 characters")
     String reason
 ) {
-    public DiscountDetails {
-        if (type == null) {
-            throw new IllegalArgumentException("Discount type is required");
-        }
-        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Discount amount must be positive");
-        }
-    }
-    
     public boolean isOrderDiscount() {
         return orderLineId == null;
     }

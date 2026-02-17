@@ -36,6 +36,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 
 /**
  * REST controller for cash register operations.
@@ -428,41 +429,63 @@ public class CashRegisterController {
      * Request DTO for opening a cash session.
      */
     public record OpenSessionRequest(
-        @NotNull UUID registerId,
-        @NotNull @PositiveOrZero BigDecimal openingAmount
+        @NotNull(message = "Register ID is required")
+        UUID registerId,
+        
+        @NotNull(message = "Opening amount is required")
+        @PositiveOrZero(message = "Opening amount must be zero or positive")
+        BigDecimal openingAmount
     ) {}
     
     /**
      * Request DTO for closing a cash session.
      */
     public record CloseSessionRequest(
-        @NotNull @PositiveOrZero BigDecimal actualAmount
+        @NotNull(message = "Actual amount is required")
+        @PositiveOrZero(message = "Actual amount must be zero or positive")
+        BigDecimal actualAmount
     ) {}
     
     /**
      * Request DTO for recording a cash movement.
      */
     public record RecordMovementRequest(
-        @NotNull MovementType type,
-        @NotNull @Positive BigDecimal amount,
-        @NotNull String reason
+        @NotNull(message = "Movement type is required")
+        MovementType type,
+        
+        @NotNull(message = "Amount is required")
+        @Positive(message = "Amount must be positive")
+        BigDecimal amount,
+        
+        @NotNull(message = "Reason is required")
+        @Size(max = 500, message = "Reason must not exceed 500 characters")
+        String reason
     ) {}
     
     /**
      * Request DTO for closing a register.
      */
     public record CloseRegisterRequest(
-        @NotNull UUID registerId,
-        @NotNull Instant periodStart,
-        @NotNull Instant periodEnd
+        @NotNull(message = "Register ID is required")
+        UUID registerId,
+        
+        @NotNull(message = "Period start is required")
+        Instant periodStart,
+        
+        @NotNull(message = "Period end is required")
+        Instant periodEnd
     ) {}
     
     /**
      * Request DTO for closing a day.
      */
     public record CloseDayRequest(
-        @NotNull UUID siteId,
-        @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+        @NotNull(message = "Site ID is required")
+        UUID siteId,
+        
+        @NotNull(message = "Date is required")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+        LocalDate date
     ) {}
     
     // Response DTOs

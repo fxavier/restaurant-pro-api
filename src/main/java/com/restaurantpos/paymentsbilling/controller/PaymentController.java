@@ -28,6 +28,7 @@ import com.restaurantpos.paymentsbilling.service.PaymentService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 /**
  * REST controller for payment operations.
@@ -199,16 +200,24 @@ public class PaymentController {
      * Request DTO for processing a payment.
      */
     public record ProcessPaymentRequest(
-        @NotNull UUID orderId,
-        @NotNull @Positive BigDecimal amount,
-        @NotNull PaymentMethod method
+        @NotNull(message = "Order ID is required")
+        UUID orderId,
+        
+        @NotNull(message = "Payment amount is required")
+        @Positive(message = "Payment amount must be positive")
+        BigDecimal amount,
+        
+        @NotNull(message = "Payment method is required")
+        PaymentMethod method
     ) {}
     
     /**
      * Request DTO for voiding a payment.
      */
     public record VoidPaymentRequest(
-        @NotNull String reason
+        @NotNull(message = "Reason is required")
+        @Size(max = 500, message = "Reason must not exceed 500 characters")
+        String reason
     ) {}
     
     // Response DTOs

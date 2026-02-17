@@ -35,6 +35,7 @@ import com.restaurantpos.orders.service.OrderService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 /**
  * REST controller for order management operations.
@@ -415,8 +416,13 @@ public class OrderController {
      */
     public record CreateOrderRequest(
         UUID tableId,  // null for delivery/takeout
-        @NotNull OrderType orderType,
-        @NotNull UUID siteId,
+        
+        @NotNull(message = "Order type is required")
+        OrderType orderType,
+        
+        @NotNull(message = "Site ID is required")
+        UUID siteId,
+        
         UUID customerId  // null for dine-in
     ) {}
     
@@ -424,9 +430,16 @@ public class OrderController {
      * Request DTO for adding an order line.
      */
     public record AddOrderLineRequest(
-        @NotNull UUID itemId,
-        @NotNull @Positive Integer quantity,
+        @NotNull(message = "Item ID is required")
+        UUID itemId,
+        
+        @NotNull(message = "Quantity is required")
+        @Positive(message = "Quantity must be positive")
+        Integer quantity,
+        
         Map<String, Object> modifiers,
+        
+        @Size(max = 500, message = "Notes must not exceed 500 characters")
         String notes
     ) {}
     
@@ -434,8 +447,13 @@ public class OrderController {
      * Request DTO for updating an order line.
      */
     public record UpdateOrderLineRequest(
-        @NotNull @Positive Integer quantity,
+        @NotNull(message = "Quantity is required")
+        @Positive(message = "Quantity must be positive")
+        Integer quantity,
+        
         Map<String, Object> modifiers,
+        
+        @Size(max = 500, message = "Notes must not exceed 500 characters")
         String notes
     ) {}
     
@@ -443,7 +461,10 @@ public class OrderController {
      * Request DTO for voiding an order line.
      */
     public record VoidOrderLineRequest(
-        @NotNull String reason,
+        @NotNull(message = "Reason is required")
+        @Size(max = 500, message = "Reason must not exceed 500 characters")
+        String reason,
+        
         Boolean recordWaste
     ) {}
     
@@ -452,8 +473,15 @@ public class OrderController {
      */
     public record ApplyDiscountRequest(
         UUID orderLineId,  // null for order-level discount
-        @NotNull com.restaurantpos.orders.model.DiscountType type,
-        @NotNull BigDecimal amount,
+        
+        @NotNull(message = "Discount type is required")
+        com.restaurantpos.orders.model.DiscountType type,
+        
+        @NotNull(message = "Discount amount is required")
+        @Positive(message = "Discount amount must be positive")
+        BigDecimal amount,
+        
+        @Size(max = 500, message = "Reason must not exceed 500 characters")
         String reason
     ) {}
     

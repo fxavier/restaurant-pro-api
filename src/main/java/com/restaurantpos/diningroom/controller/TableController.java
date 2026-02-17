@@ -23,6 +23,7 @@ import com.restaurantpos.diningroom.service.TableManagementService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * REST controller for table management operations.
@@ -227,14 +228,17 @@ public class TableController {
      * Request DTO for transferring a table.
      */
     public record TransferTableRequest(
-            @NotNull UUID toTableId
+            @NotNull(message = "Target table ID is required")
+            UUID toTableId
     ) {}
     
     /**
      * Request DTO for blocking a table.
      */
     public record BlockTableRequest(
-            @NotBlank String reason
+            @NotBlank(message = "Reason for blocking is required")
+            @Size(max = 500, message = "Reason must not exceed 500 characters")
+            String reason
     ) {}
     
     // Response DTOs

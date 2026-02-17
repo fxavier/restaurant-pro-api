@@ -24,6 +24,7 @@ import com.restaurantpos.orders.entity.Order;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 /**
  * REST controller for customer management operations.
@@ -246,9 +247,18 @@ public class CustomerController {
      * Request DTO for creating a customer.
      */
     public record CreateCustomerRequest(
-        @NotBlank String name,
-        @NotBlank String phone,
+        @NotBlank(message = "Customer name is required")
+        @Size(max = 255, message = "Customer name must not exceed 255 characters")
+        String name,
+        
+        @NotBlank(message = "Phone number is required")
+        @Size(max = 20, message = "Phone number must not exceed 20 characters")
+        String phone,
+        
+        @Size(max = 1000, message = "Address must not exceed 1000 characters")
         String address,
+        
+        @Size(max = 500, message = "Delivery notes must not exceed 500 characters")
         String deliveryNotes
     ) {}
     
@@ -257,9 +267,16 @@ public class CustomerController {
      * All fields are optional - only provided fields will be updated.
      */
     public record UpdateCustomerRequest(
+        @Size(max = 255, message = "Customer name must not exceed 255 characters")
         String name,
+        
+        @Size(max = 20, message = "Phone number must not exceed 20 characters")
         String phone,
+        
+        @Size(max = 1000, message = "Address must not exceed 1000 characters")
         String address,
+        
+        @Size(max = 500, message = "Delivery notes must not exceed 500 characters")
         String deliveryNotes
     ) {}
     

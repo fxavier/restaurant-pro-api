@@ -270,21 +270,24 @@ public class PrinterController {
      * Request DTO for updating printer status.
      */
     public record UpdatePrinterStatusRequest(
-        @NotNull PrinterStatus status
+        @NotNull(message = "Printer status is required")
+        PrinterStatus status
     ) {}
     
     /**
      * Request DTO for redirecting a printer.
      */
     public record RedirectPrinterRequest(
-        @NotNull UUID targetPrinterId
+        @NotNull(message = "Target printer ID is required")
+        UUID targetPrinterId
     ) {}
     
     /**
      * Request DTO for reprinting a job.
      */
     public record ReprintJobRequest(
-        @NotNull UUID printerId
+        @NotNull(message = "Printer ID is required")
+        UUID printerId
     ) {}
     
     // Response DTOs

@@ -1,8 +1,5 @@
 package com.restaurantpos.identityaccess.controller;
 
-import com.restaurantpos.identityaccess.dto.AuthResponse;
-import com.restaurantpos.identityaccess.exception.AuthenticationException;
-import com.restaurantpos.identityaccess.service.AuthenticationService;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -14,8 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.restaurantpos.identityaccess.dto.AuthResponse;
+import com.restaurantpos.identityaccess.exception.AuthenticationException;
+import com.restaurantpos.identityaccess.service.AuthenticationService;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 /**
  * REST controller for authentication operations.
@@ -84,22 +87,30 @@ public class AuthenticationController {
      * Request DTO for login.
      */
     public record LoginRequest(
-            @NotBlank UUID tenantId,
-            @NotBlank String username,
-            @NotBlank String password
+            @NotNull(message = "Tenant ID is required")
+            UUID tenantId,
+            
+            @NotBlank(message = "Username is required")
+            @Size(max = 100, message = "Username must not exceed 100 characters")
+            String username,
+            
+            @NotBlank(message = "Password is required")
+            String password
     ) {}
     
     /**
      * Request DTO for token refresh.
      */
     public record RefreshRequest(
-            @NotBlank String refreshToken
+            @NotBlank(message = "Refresh token is required")
+            String refreshToken
     ) {}
     
     /**
      * Request DTO for logout.
      */
     public record LogoutRequest(
-            @NotBlank String refreshToken
+            @NotBlank(message = "Refresh token is required")
+            String refreshToken
     ) {}
 }
