@@ -80,3 +80,8 @@ server:
     include-binding-errors: always
     include-stacktrace: on_param
     include-exception: false
+
+# Spring MVC configuration
+spring.mvc:
+  problemdetails:
+    enabled: true
