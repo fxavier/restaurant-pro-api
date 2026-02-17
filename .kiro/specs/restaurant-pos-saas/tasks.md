@@ -413,7 +413,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - getOrderHistory(customerId): get customer's previous orders
     - _Requirements: 8.1, 8.2, 8.3, 8.4_
   
-  - [ ] 14.3 Create REST controllers for customers
+  - [x] 14.3 Create REST controllers for customers
     - GET /api/customers/search?phone={phone}: search by phone
     - GET /api/customers/search?suffix={suffix}: search by suffix
     - POST /api/customers: create customer
