@@ -498,7 +498,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
 ### Phase 4: Cross-Cutting Concerns and Robustness
 
 - [ ] 17. Error handling and validation
-  - [ ] 17.1 Implement global exception handler
+  - [x] 17.1 Implement global exception handler
     - Create @ControllerAdvice with exception handlers
     - Return RFC 7807 Problem Details format for all errors
     - Handle: validation errors (400), authorization errors (403), not found (404), conflicts (409), business rule violations (422), server errors (500)
