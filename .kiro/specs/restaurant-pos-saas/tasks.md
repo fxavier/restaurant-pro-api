@@ -442,7 +442,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Create repositories with tenant filtering
     - _Requirements: 10.1, 10.2, 10.3, 10.6_
   
-  - [ ] 15.2 Implement CashSessionService
+  - [x] 15.2 Implement CashSessionService
     - openSession(registerId, employeeId, openingAmount): start session
     - closeSession(sessionId, actualAmount): close session, calculate variance
     - recordMovement(sessionId, type, amount, reason): record manual movement
