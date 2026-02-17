@@ -462,7 +462,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - reprintClosingReport(closingId): reprint with permission check
     - _Requirements: 10.7, 10.8, 10.9_
   
-  - [ ] 15.5 Create REST controllers for cash register
+  - [x] 15.5 Create REST controllers for cash register
     - POST /api/cash/sessions: open session
     - POST /api/cash/sessions/{id}/close: close session
     - POST /api/cash/sessions/{id}/movements: record movement
