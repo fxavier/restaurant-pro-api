@@ -568,7 +568,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Create LoggingFilter to populate MDC from request context
     - _Requirements: 14.1, 14.2, 14.6_
   
-  - [ ] 19.2 Implement API request logging
+  - [x] 19.2 Implement API request logging
     - Create RequestLoggingFilter to log all API requests
     - Log: method, path, status_code, duration_ms, tenant_id
     - _Requirements: 14.2_
