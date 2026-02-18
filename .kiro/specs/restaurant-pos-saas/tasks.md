@@ -573,13 +573,13 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Log: method, path, status_code, duration_ms, tenant_id
     - _Requirements: 14.2_
   
-  - [ ] 19.3 Configure Micrometer metrics
+  - [x] 19.3 Configure Micrometer metrics
     - Add Micrometer dependencies
     - Expose metrics endpoint: /actuator/metrics
     - Configure metrics: request rates, error rates, response times, DB connection pool
     - _Requirements: 14.3_
   
-  - [ ] 19.4 Implement health checks
+  - [-] 19.4 Implement health checks
     - Configure Spring Boot Actuator
     - Add custom health indicators: database connectivity, disk space
     - Expose /actuator/health endpoint
