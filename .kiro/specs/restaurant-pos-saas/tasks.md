@@ -505,7 +505,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Include traceId in all error responses
     - _Requirements: 13.1_
   
-  - [ ] 17.2 Add input validation annotations
+  - [x] 17.2 Add input validation annotations
     - Add @Valid and Bean Validation annotations to all DTOs
     - Validate: required fields, formats, ranges, patterns
     - _Requirements: 13.1_

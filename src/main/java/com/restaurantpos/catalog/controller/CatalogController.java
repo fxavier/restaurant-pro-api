@@ -27,6 +27,8 @@ import com.restaurantpos.identityaccess.tenant.TenantContext;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 
 /**
  * REST controller for catalog management operations.
@@ -257,7 +259,11 @@ public class CatalogController {
      * Request DTO for creating a family.
      */
     public record CreateFamilyRequest(
-        @NotBlank String name,
+        @NotBlank(message = "Family name is required")
+        @Size(max = 255, message = "Family name must not exceed 255 characters")
+        String name,
+        
+        @PositiveOrZero(message = "Display order must be zero or positive")
         Integer displayOrder
     ) {}
     
@@ -265,10 +271,21 @@ public class CatalogController {
      * Request DTO for creating an item.
      */
     public record CreateItemRequest(
-        @NotNull UUID subfamilyId,
-        @NotBlank String name,
+        @NotNull(message = "Subfamily ID is required")
+        UUID subfamilyId,
+        
+        @NotBlank(message = "Item name is required")
+        @Size(max = 255, message = "Item name must not exceed 255 characters")
+        String name,
+        
+        @Size(max = 1000, message = "Description must not exceed 1000 characters")
         String description,
-        @NotNull BigDecimal basePrice,
+        
+        @NotNull(message = "Base price is required")
+        @PositiveOrZero(message = "Base price must be zero or positive")
+        BigDecimal basePrice,
+        
+        @Size(max = 500, message = "Image URL must not exceed 500 characters")
         String imageUrl
     ) {}
     
@@ -276,10 +293,21 @@ public class CatalogController {
      * Request DTO for updating an item.
      */
     public record UpdateItemRequest(
-        @NotNull UUID subfamilyId,
-        @NotBlank String name,
+        @NotNull(message = "Subfamily ID is required")
+        UUID subfamilyId,
+        
+        @NotBlank(message = "Item name is required")
+        @Size(max = 255, message = "Item name must not exceed 255 characters")
+        String name,
+        
+        @Size(max = 1000, message = "Description must not exceed 1000 characters")
         String description,
-        @NotNull BigDecimal basePrice,
+        
+        @NotNull(message = "Base price is required")
+        @PositiveOrZero(message = "Base price must be zero or positive")
+        BigDecimal basePrice,
+        
+        @Size(max = 500, message = "Image URL must not exceed 500 characters")
         String imageUrl
     ) {}
     
@@ -287,7 +315,8 @@ public class CatalogController {
      * Request DTO for updating item availability.
      */
     public record UpdateAvailabilityRequest(
-        @NotNull Boolean available
+        @NotNull(message = "Availability status is required")
+        Boolean available
     ) {}
     
     // Response DTOs

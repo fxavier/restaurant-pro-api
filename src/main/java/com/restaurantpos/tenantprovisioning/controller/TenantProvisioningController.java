@@ -1,11 +1,5 @@
 package com.restaurantpos.tenantprovisioning.controller;
 
-import com.restaurantpos.tenantprovisioning.entity.Site;
-import com.restaurantpos.tenantprovisioning.entity.Tenant;
-import com.restaurantpos.tenantprovisioning.model.TenantStatus;
-import com.restaurantpos.tenantprovisioning.service.TenantProvisioningService;
-import com.restaurantpos.tenantprovisioning.service.TenantProvisioningService.SiteDetails;
-import com.restaurantpos.tenantprovisioning.service.TenantProvisioningService.TenantSettings;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -21,8 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.restaurantpos.tenantprovisioning.entity.Site;
+import com.restaurantpos.tenantprovisioning.entity.Tenant;
+import com.restaurantpos.tenantprovisioning.model.TenantStatus;
+import com.restaurantpos.tenantprovisioning.service.TenantProvisioningService;
+import com.restaurantpos.tenantprovisioning.service.TenantProvisioningService.SiteDetails;
+import com.restaurantpos.tenantprovisioning.service.TenantProvisioningService.TenantSettings;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 /**
  * REST controller for tenant provisioning and management.
@@ -193,7 +195,11 @@ public class TenantProvisioningController {
      * Request DTO for creating a tenant.
      */
     public record CreateTenantRequest(
-            @NotBlank String name,
+            @NotBlank(message = "Tenant name is required")
+            @Size(max = 255, message = "Tenant name must not exceed 255 characters")
+            String name,
+            
+            @Size(max = 50, message = "Subscription plan must not exceed 50 characters")
             String subscriptionPlan
     ) {}
     
@@ -201,9 +207,16 @@ public class TenantProvisioningController {
      * Request DTO for creating a site.
      */
     public record CreateSiteRequest(
-            @NotBlank String name,
+            @NotBlank(message = "Site name is required")
+            @Size(max = 255, message = "Site name must not exceed 255 characters")
+            String name,
+            
+            @Size(max = 1000, message = "Address must not exceed 1000 characters")
             String address,
+            
+            @Size(max = 50, message = "Timezone must not exceed 50 characters")
             String timezone,
+            
             String settings
     ) {}
     
@@ -211,8 +224,12 @@ public class TenantProvisioningController {
      * Request DTO for updating tenant settings.
      */
     public record UpdateTenantSettingsRequest(
+            @Size(max = 255, message = "Tenant name must not exceed 255 characters")
             String name,
+            
+            @Size(max = 50, message = "Subscription plan must not exceed 50 characters")
             String subscriptionPlan,
+            
             TenantStatus status
     ) {}
     

@@ -25,6 +25,7 @@ import com.restaurantpos.paymentsbilling.service.BillingService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 /**
  * REST controller for billing operations.
@@ -232,8 +233,13 @@ public class BillingController {
      * Request DTO for generating a fiscal document.
      */
     public record GenerateFiscalDocumentRequest(
-        @NotNull UUID orderId,
-        @NotNull DocumentType documentType,
+        @NotNull(message = "Order ID is required")
+        UUID orderId,
+        
+        @NotNull(message = "Document type is required")
+        DocumentType documentType,
+        
+        @Size(max = 20, message = "Customer NIF must not exceed 20 characters")
         String customerNif  // Required for invoices, optional for receipts
     ) {}
     
@@ -241,22 +247,29 @@ public class BillingController {
      * Request DTO for voiding a fiscal document.
      */
     public record VoidFiscalDocumentRequest(
-        @NotNull String reason
+        @NotNull(message = "Reason is required")
+        @Size(max = 500, message = "Reason must not exceed 500 characters")
+        String reason
     ) {}
     
     /**
      * Request DTO for printing a subtotal.
      */
     public record PrintSubtotalRequest(
-        @NotNull UUID orderId
+        @NotNull(message = "Order ID is required")
+        UUID orderId
     ) {}
     
     /**
      * Request DTO for splitting a bill.
      */
     public record SplitBillRequest(
-        @NotNull UUID orderId,
-        @NotNull @Positive Integer splitCount
+        @NotNull(message = "Order ID is required")
+        UUID orderId,
+        
+        @NotNull(message = "Split count is required")
+        @Positive(message = "Split count must be positive")
+        Integer splitCount
     ) {}
     
     // Response DTOs
