@@ -540,7 +540,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Limit: 5 attempts per minute
     - _Requirements: 13.4_
   
-  - [ ] 18.4 Implement CSRF protection
+  - [x] 18.4 Implement CSRF protection
     - Configure Spring Security CSRF for state-changing operations
     - Exclude /api/auth/** from CSRF (stateless JWT)
     - _Requirements: 13.6_

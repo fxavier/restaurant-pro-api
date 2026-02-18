@@ -48,13 +48,21 @@ public class SecurityConfig {
     
     /**
      * Configures the security filter chain with JWT authentication.
+     * 
+     * CSRF Protection Strategy:
+     * - Enabled for all state-changing operations (POST, PUT, DELETE, PATCH)
+     * - Disabled for /api/auth/** endpoints (stateless JWT authentication)
+     * - Disabled for actuator endpoints (monitoring)
+     * 
+     * Requirement: 13.6
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Disable CSRF for stateless JWT authentication on /api/auth/** endpoints
+            // Configure CSRF protection
+            // Exclude stateless JWT authentication endpoints and monitoring endpoints
             .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/auth/**")
+                .ignoringRequestMatchers("/api/auth/**", "/actuator/**")
             )
             
             // Configure CORS
