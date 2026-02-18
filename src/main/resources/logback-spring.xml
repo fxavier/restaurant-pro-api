@@ -5,7 +5,7 @@
     <conversionRule conversionWord="maskedMsg" 
                     converterClass="com.restaurantpos.common.logging.MaskingMessageConverter" />
     
-    <!-- Console appender with masking -->
+    <!-- Console appender with masking (for development) -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %maskedMsg%n</pattern>
@@ -25,12 +25,38 @@
         </encoder>
     </appender>
     
-    <!-- JSON appender with masking for structured logging -->
+    <!-- JSON appender with structured logging and MDC fields -->
     <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- Include standard fields -->
+            <includeContext>true</includeContext>
+            <includeMdc>true</includeMdc>
+            <includeStructuredArguments>true</includeStructuredArguments>
+            <includeTags>true</includeTags>
+            
+            <!-- Custom application identifier -->
             <customFields>{"application":"restaurant-pos-saas"}</customFields>
-            <!-- Message will be masked by our custom converter -->
+            
+            <!-- Field names configuration -->
+            <fieldNames>
+                <timestamp>timestamp</timestamp>
+                <version>[ignore]</version>
+                <message>message</message>
+                <logger>logger</logger>
+                <thread>thread</thread>
+                <level>level</level>
+                <levelValue>[ignore]</levelValue>
+            </fieldNames>
+            
+            <!-- MDC fields will be included automatically: tenant_id, user_id, trace_id -->
+            
+            <!-- Message will be masked by our custom converter through the message provider -->
             <messageSplitRegex>\n</messageSplitRegex>
+            
+            <!-- Provider to apply masking to JSON messages -->
+            <provider class="net.logstash.logback.composite.loggingevent.MessageJsonProvider">
+                <messageSplitRegex>\n</messageSplitRegex>
+            </provider>
         </encoder>
     </appender>
     
@@ -66,10 +92,20 @@
             <appender-ref ref="FILE" />
             <appender-ref ref="JSON" />
         </root>
+        
+        <logger name="com.restaurantpos" level="INFO" additivity="false">
+            <appender-ref ref="JSON" />
+        </logger>
     </springProfile>
     
     <springProfile name="dev">
         <root level="DEBUG">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+    
+    <springProfile name="test">
+        <root level="INFO">
             <appender-ref ref="CONSOLE" />
         </root>
     </springProfile>

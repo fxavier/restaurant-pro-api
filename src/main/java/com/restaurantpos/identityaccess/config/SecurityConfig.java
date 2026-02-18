@@ -2,10 +2,6 @@ package com.restaurantpos.identityaccess.config;
 
 import java.util.Arrays;
 
-import com.restaurantpos.identityaccess.security.JwtAccessDeniedHandler;
-import com.restaurantpos.identityaccess.security.JwtAuthenticationEntryPoint;
-import com.restaurantpos.identityaccess.security.RateLimitingFilter;
-import com.restaurantpos.identityaccess.tenant.TenantContextFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -21,6 +17,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.restaurantpos.identityaccess.logging.LoggingFilter;
+import com.restaurantpos.identityaccess.security.JwtAccessDeniedHandler;
+import com.restaurantpos.identityaccess.security.JwtAuthenticationEntryPoint;
+import com.restaurantpos.identityaccess.security.RateLimitingFilter;
+import com.restaurantpos.identityaccess.tenant.TenantContextFilter;
 
 /**
  * Spring Security configuration for JWT-based authentication.
@@ -40,10 +42,14 @@ public class SecurityConfig {
     
     private final TenantContextFilter tenantContextFilter;
     private final RateLimitingFilter rateLimitingFilter;
+    private final LoggingFilter loggingFilter;
     
-    public SecurityConfig(TenantContextFilter tenantContextFilter, RateLimitingFilter rateLimitingFilter) {
+    public SecurityConfig(TenantContextFilter tenantContextFilter, 
+                         RateLimitingFilter rateLimitingFilter,
+                         LoggingFilter loggingFilter) {
         this.tenantContextFilter = tenantContextFilter;
         this.rateLimitingFilter = rateLimitingFilter;
+        this.loggingFilter = loggingFilter;
     }
     
     /**
@@ -97,7 +103,10 @@ public class SecurityConfig {
             .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)
             
             // Add tenant context filter after JWT authentication
-            .addFilterAfter(tenantContextFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterAfter(tenantContextFilter, UsernamePasswordAuthenticationFilter.class)
+            
+            // Add logging filter after tenant context to ensure MDC is populated with tenant_id
+            .addFilterAfter(loggingFilter, TenantContextFilter.class);
         
         return http.build();
     }
