@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    
+    <!-- Register custom converter for masking sensitive data -->
+    <conversionRule conversionWord="maskedMsg" 
+                    converterClass="com.restaurantpos.common.logging.MaskingMessageConverter" />
+    
+    <!-- Console appender with masking -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %maskedMsg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- File appender with masking (optional, for production) -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/restaurant-pos.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/restaurant-pos.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %maskedMsg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- JSON appender with masking for structured logging -->
+    <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"application":"restaurant-pos-saas"}</customFields>
+            <!-- Message will be masked by our custom converter -->
+            <messageSplitRegex>\n</messageSplitRegex>
+        </encoder>
+    </appender>
+    
+    <!-- Root logger -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+    
+    <!-- Application-specific loggers -->
+    <logger name="com.restaurantpos" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <logger name="org.springframework.web" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <logger name="org.springframework.security" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    
+    <!-- Profile-specific configurations -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="FILE" />
+            <appender-ref ref="JSON" />
+        </root>
+    </springProfile>
+    
+    <springProfile name="dev">
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+    
+</configuration>
