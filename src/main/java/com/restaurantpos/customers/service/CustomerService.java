@@ -56,8 +56,14 @@ public class CustomerService {
      * Searches for customers by phone number suffix (last N digits).
      * Uses the varchar_pattern_ops index for efficient suffix search with LIKE '%suffix'.
      * 
+     * The suffix is sanitized to prevent SQL injection by:
+     * 1. Trimming whitespace
+     * 2. Removing any SQL wildcard characters (%, _)
+     * 3. Prepending '%' for the LIKE pattern
+     * 
      * Requirements: 8.1 - Support phone suffix search for quick customer lookup
      * Requirements: 8.2 - Display all matches when multiple customers found
+     * Requirements: 13.2 - Prevent SQL injection
      * 
      * @param tenantId the tenant ID
      * @param suffix the phone number suffix (last N digits)
@@ -73,7 +79,20 @@ public class CustomerService {
             throw new IllegalArgumentException("Phone suffix cannot be null or empty");
         }
         
-        return customerRepository.findByTenantIdAndPhoneSuffix(tenantId, suffix.trim());
+        // Sanitize suffix to prevent SQL injection
+        // Remove SQL wildcard characters and trim
+        String sanitizedSuffix = suffix.trim()
+            .replace("%", "")
+            .replace("_", "");
+        
+        if (sanitizedSuffix.isEmpty()) {
+            throw new IllegalArgumentException("Phone suffix cannot contain only wildcard characters");
+        }
+        
+        // Prepend '%' for LIKE pattern matching
+        String likePattern = "%" + sanitizedSuffix;
+        
+        return customerRepository.findByTenantIdAndPhoneSuffix(tenantId, likePattern);
     }
     
     /**

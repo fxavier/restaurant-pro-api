@@ -110,7 +110,8 @@ class CustomerServiceTest {
     void searchByPhoneSuffix_shouldReturnCustomers() {
         // Arrange
         String suffix = "7890";
-        when(customerRepository.findByTenantIdAndPhoneSuffix(tenantId, suffix))
+        // After sanitization, the suffix becomes "%7890"
+        when(customerRepository.findByTenantIdAndPhoneSuffix(tenantId, "%7890"))
             .thenReturn(Arrays.asList(customer));
         
         // Act
@@ -120,14 +121,15 @@ class CustomerServiceTest {
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals(customer, result.get(0));
-        verify(customerRepository).findByTenantIdAndPhoneSuffix(tenantId, suffix);
+        verify(customerRepository).findByTenantIdAndPhoneSuffix(tenantId, "%7890");
     }
     
     @Test
     void searchByPhoneSuffix_shouldTrimSuffix() {
         // Arrange
         String suffix = "  7890  ";
-        when(customerRepository.findByTenantIdAndPhoneSuffix(tenantId, "7890"))
+        // After sanitization, the suffix becomes "%7890"
+        when(customerRepository.findByTenantIdAndPhoneSuffix(tenantId, "%7890"))
             .thenReturn(Arrays.asList(customer));
         
         // Act
@@ -135,7 +137,7 @@ class CustomerServiceTest {
         
         // Assert
         assertNotNull(result);
-        verify(customerRepository).findByTenantIdAndPhoneSuffix(tenantId, "7890");
+        verify(customerRepository).findByTenantIdAndPhoneSuffix(tenantId, "%7890");
     }
     
     @Test

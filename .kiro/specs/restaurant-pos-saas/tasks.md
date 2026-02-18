@@ -524,12 +524,12 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
 
 
 - [ ] 18. Security hardening
-  - [ ] 18.1 Implement SQL injection prevention
+  - [x] 18.1 Implement SQL injection prevention
     - Verify all queries use parameterized statements (JPA/JPQL)
     - Add input sanitization for any raw SQL
     - _Requirements: 13.2_
   
-  - [ ] 18.2 Implement sensitive data masking in logs
+  - [x] 18.2 Implement sensitive data masking in logs
     - Create LogMaskingFilter to mask passwords, card numbers, NIF
     - Configure logback with masking patterns
     - _Requirements: 13.3_
