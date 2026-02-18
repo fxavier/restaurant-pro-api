@@ -53,13 +53,17 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
      * This method uses the varchar_pattern_ops index for efficient suffix search.
      * The LIKE pattern '%suffix' is optimized by the specialized index.
      * 
+     * Note: The suffix parameter should be passed with the '%' prefix already included
+     * (e.g., "%1234") to prevent SQL injection. The service layer is responsible for
+     * sanitizing and formatting the input.
+     * 
      * Requirements: 8.1 - Support phone suffix search for quick customer lookup
      * 
      * @param tenantId the tenant ID
-     * @param suffix the phone number suffix (last N digits)
+     * @param suffix the phone number suffix with '%' prefix (e.g., "%1234")
      * @return list of customers whose phone ends with the suffix
      */
-    @Query("SELECT c FROM Customer c WHERE c.tenantId = :tenantId AND c.phone LIKE %:suffix")
+    @Query("SELECT c FROM Customer c WHERE c.tenantId = :tenantId AND c.phone LIKE :suffix")
     List<Customer> findByTenantIdAndPhoneSuffix(@Param("tenantId") UUID tenantId, @Param("suffix") String suffix);
     
     /**
