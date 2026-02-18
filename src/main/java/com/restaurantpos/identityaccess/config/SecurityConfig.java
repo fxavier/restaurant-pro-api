@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import com.restaurantpos.identityaccess.security.JwtAccessDeniedHandler;
 import com.restaurantpos.identityaccess.security.JwtAuthenticationEntryPoint;
+import com.restaurantpos.identityaccess.security.RateLimitingFilter;
 import com.restaurantpos.identityaccess.tenant.TenantContextFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,9 +39,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
     
     private final TenantContextFilter tenantContextFilter;
+    private final RateLimitingFilter rateLimitingFilter;
     
-    public SecurityConfig(TenantContextFilter tenantContextFilter) {
+    public SecurityConfig(TenantContextFilter tenantContextFilter, RateLimitingFilter rateLimitingFilter) {
         this.tenantContextFilter = tenantContextFilter;
+        this.rateLimitingFilter = rateLimitingFilter;
     }
     
     /**
@@ -81,6 +84,9 @@ public class SecurityConfig {
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                 .accessDeniedHandler(new JwtAccessDeniedHandler())
             )
+            
+            // Add rate limiting filter before authentication
+            .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)
             
             // Add tenant context filter after JWT authentication
             .addFilterAfter(tenantContextFilter, UsernamePasswordAuthenticationFilter.class);
