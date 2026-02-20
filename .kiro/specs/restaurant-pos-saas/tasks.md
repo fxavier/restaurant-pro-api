@@ -700,7 +700,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Test: open session → record sales (via payments) → record manual movements → close session → verify variance calculation → generate report
     - _Requirements: Testing Strategy_
   
-  - [ ] 24.5 Write integration test for tenant isolation
+  - [x] 24.5 Write integration test for tenant isolation
     - Test: create data for Tenant A and Tenant B → query as Tenant A user → verify no Tenant B data returned → query as Tenant B user → verify no Tenant A data returned
     - _Requirements: Testing Strategy_
 
