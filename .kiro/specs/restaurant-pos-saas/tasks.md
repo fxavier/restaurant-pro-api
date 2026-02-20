@@ -618,7 +618,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Validate generated XML before returning
     - _Requirements: 17.3_
   
-  - [ ] 21.3 Create REST controller for export
+  - [x] 21.3 Create REST controller for export
     - POST /api/exports/saft-pt: generate export with date range
     - Return XML file as download
     - Log export operation with audit trail
@@ -682,30 +682,30 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Validates: Requirements 9.6**
 
 - [ ] 24. Integration tests with Testcontainers
-  - [ ] 24.1 Set up Testcontainers infrastructure
+  - [x] 24.1 Set up Testcontainers infrastructure
     - Create base integration test class with PostgreSQL container
     - Configure test application properties
     - Create test data builders for all entities
     - _Requirements: Testing Strategy_
   
-  - [ ] 24.2 Write integration test for complete order flow
+  - [x] 24.2 Write integration test for complete order flow
     - Test: open table → add order lines → confirm order → create print jobs → process payment → close order → verify table available
     - _Requirements: Testing Strategy_
   
-  - [ ] 24.3 Write integration test for partial payment and split bill
+  - [x] 24.3 Write integration test for partial payment and split bill
     - Test: create order → add multiple partial payments → verify order remains open → complete final payment → verify order closed
     - _Requirements: Testing Strategy_
   
-  - [ ] 24.4 Write integration test for cash session lifecycle
+  - [x] 24.4 Write integration test for cash session lifecycle
     - Test: open session → record sales (via payments) → record manual movements → close session → verify variance calculation → generate report
     - _Requirements: Testing Strategy_
   
-  - [ ] 24.5 Write integration test for tenant isolation
+  - [x] 24.5 Write integration test for tenant isolation
     - Test: create data for Tenant A and Tenant B → query as Tenant A user → verify no Tenant B data returned → query as Tenant B user → verify no Tenant A data returned
     - _Requirements: Testing Strategy_
 
 - [ ] 25. Spring Modulith verification
-  - [ ] 25.1 Write module boundary tests
+  - [x] 25.1 Write module boundary tests
     - Create test to verify module dependencies match design
     - Use Spring Modulith's ApplicationModules.verify()
     - Ensure no circular dependencies
