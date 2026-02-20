@@ -696,7 +696,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Test: create order → add multiple partial payments → verify order remains open → complete final payment → verify order closed
     - _Requirements: Testing Strategy_
   
-  - [ ] 24.4 Write integration test for cash session lifecycle
+  - [x] 24.4 Write integration test for cash session lifecycle
     - Test: open session → record sales (via payments) → record manual movements → close session → verify variance calculation → generate report
     - _Requirements: Testing Strategy_
   
