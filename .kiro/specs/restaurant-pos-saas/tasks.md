@@ -597,7 +597,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Property 49: Correlation ID Propagation**
     - **Validates: Requirements 14.6**
 
-- [ ] 20. Checkpoint - Robustness complete
+- [x] 20. Checkpoint - Robustness complete
   - Ensure all tests pass
   - Verify error handling returns proper Problem Details format
   - Verify logs are in JSON format with all required fields
@@ -607,7 +607,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
 ### Phase 5: Integrations and Advanced Features
 
 - [ ] 21. SAF-T PT fiscal export (optional)
-  - [ ] 21.1 Implement SAF-T export service
+  - [x] 21.1 Implement SAF-T export service
     - Create SaftExportService with generateExport(tenantId, startDate, endDate) method
     - Query all fiscal documents, payments, customers, items in date range
     - Generate XML according to SAF-T PT schema

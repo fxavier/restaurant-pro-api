@@ -73,4 +73,16 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
      * @return true if payment exists
      */
     boolean existsByTenantIdAndIdempotencyKey(UUID tenantId, String idempotencyKey);
+
+
+    /**
+     * Finds all payments for a list of order IDs.
+     * Used for SAF-T export to get payments for multiple orders.
+     *
+     * @param tenantId the tenant ID
+     * @param orderIds the list of order IDs
+     * @return list of payments
+     */
+    List<Payment> findByTenantIdAndOrderIdIn(UUID tenantId, List<UUID> orderIds);
+
 }
