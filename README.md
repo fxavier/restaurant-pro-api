@@ -84,6 +84,10 @@ com.restaurantpos.{module}/
 └── events/          # Domain events (if applicable)
 ```
 
+For detailed module documentation, see:
+- [Module Structure Documentation](docs/architecture/module-structure.md)
+- [Architecture Decision Records](docs/architecture/adr/)
+
 ## API Documentation
 
 API endpoints will be available at:
