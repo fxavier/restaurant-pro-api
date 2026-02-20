@@ -688,7 +688,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Create test data builders for all entities
     - _Requirements: Testing Strategy_
   
-  - [ ] 24.2 Write integration test for complete order flow
+  - [x] 24.2 Write integration test for complete order flow
     - Test: open table → add order lines → confirm order → create print jobs → process payment → close order → verify table available
     - _Requirements: Testing Strategy_
   
