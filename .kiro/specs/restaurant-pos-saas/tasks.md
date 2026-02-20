@@ -682,7 +682,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Validates: Requirements 9.6**
 
 - [ ] 24. Integration tests with Testcontainers
-  - [ ] 24.1 Set up Testcontainers infrastructure
+  - [x] 24.1 Set up Testcontainers infrastructure
     - Create base integration test class with PostgreSQL container
     - Configure test application properties
     - Create test data builders for all entities
