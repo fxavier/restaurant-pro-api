@@ -692,7 +692,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Test: open table → add order lines → confirm order → create print jobs → process payment → close order → verify table available
     - _Requirements: Testing Strategy_
   
-  - [ ] 24.3 Write integration test for partial payment and split bill
+  - [x] 24.3 Write integration test for partial payment and split bill
     - Test: create order → add multiple partial payments → verify order remains open → complete final payment → verify order closed
     - _Requirements: Testing Strategy_
   
