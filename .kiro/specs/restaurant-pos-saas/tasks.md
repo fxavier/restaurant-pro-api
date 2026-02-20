@@ -618,7 +618,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Validate generated XML before returning
     - _Requirements: 17.3_
   
-  - [ ] 21.3 Create REST controller for export
+  - [x] 21.3 Create REST controller for export
     - POST /api/exports/saft-pt: generate export with date range
     - Return XML file as download
     - Log export operation with audit trail
