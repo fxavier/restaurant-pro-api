@@ -1,16 +1,27 @@
 package com.restaurantpos.fiscalexport.service;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
+import javax.xml.XMLConstants;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.xml.sax.SAXException;
 
 import com.restaurantpos.catalog.entity.Item;
 import com.restaurantpos.catalog.repository.ItemRepository;
+import com.restaurantpos.common.exception.BusinessRuleViolationException;
 import com.restaurantpos.customers.entity.Customer;
 import com.restaurantpos.customers.repository.CustomerRepository;
 import com.restaurantpos.paymentsbilling.entity.FiscalDocument;
@@ -23,7 +34,7 @@ import com.restaurantpos.paymentsbilling.repository.PaymentRepository;
  * Generates XML files containing fiscal documents, payments, customers, and items
  * for a specified date range and tenant.
  * 
- * Requirements: 17.1, 17.2
+ * Requirements: 17.1, 17.2, 17.3
  */
 @Service
 @Transactional(readOnly = true)
@@ -33,6 +44,7 @@ public class SaftExportService {
     private final PaymentRepository paymentRepository;
     private final CustomerRepository customerRepository;
     private final ItemRepository itemRepository;
+    private final Schema saftSchema;
     
     public SaftExportService(
             FiscalDocumentRepository fiscalDocumentRepository,
@@ -43,19 +55,40 @@ public class SaftExportService {
         this.paymentRepository = paymentRepository;
         this.customerRepository = customerRepository;
         this.itemRepository = itemRepository;
+        this.saftSchema = loadSaftSchema();
+    }
+    
+    /**
+     * Loads the SAF-T PT XSD schema from classpath.
+     * 
+     * @return the loaded Schema object
+     * @throws RuntimeException if schema cannot be loaded
+     * 
+     * Requirements: 17.3
+     */
+    private Schema loadSaftSchema() {
+        try {
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            ClassPathResource schemaResource = new ClassPathResource("saft-pt-schema.xsd");
+            return schemaFactory.newSchema(schemaResource.getURL());
+        } catch (SAXException | IOException e) {
+            throw new RuntimeException("Failed to load SAF-T PT schema", e);
+        }
     }
     
     /**
      * Generates a SAF-T PT XML export for the specified tenant and date range.
      * Queries all fiscal documents, payments, customers, and items within the date range
      * and generates XML according to SAF-T PT schema.
+     * Validates the generated XML against the SAF-T PT schema before returning.
      * 
      * @param tenantId the tenant ID to export data for
      * @param startDate the start date of the export range (inclusive)
      * @param endDate the end date of the export range (inclusive)
      * @return XML string containing the SAF-T PT export
+     * @throws BusinessRuleViolationException if generated XML fails schema validation
      * 
-     * Requirements: 17.1, 17.2
+     * Requirements: 17.1, 17.2, 17.3
      */
     public String generateExport(UUID tenantId, LocalDate startDate, LocalDate endDate) {
         // Convert LocalDate to Instant for database queries
@@ -80,7 +113,33 @@ public class SaftExportService {
         List<Item> items = itemRepository.findByTenantId(tenantId);
         
         // Generate SAF-T PT XML
-        return generateSaftXml(tenantId, fiscalDocuments, payments, customers, items, startDate, endDate);
+        String xml = generateSaftXml(tenantId, fiscalDocuments, payments, customers, items, startDate, endDate);
+        
+        // Validate XML against schema
+        validateXml(xml);
+        
+        return xml;
+    }
+    
+    /**
+     * Validates the generated XML against the SAF-T PT schema.
+     * 
+     * @param xml the XML string to validate
+     * @throws BusinessRuleViolationException if validation fails
+     * 
+     * Requirements: 17.3
+     */
+    private void validateXml(String xml) {
+        try {
+            Validator validator = saftSchema.newValidator();
+            validator.validate(new StreamSource(new StringReader(xml)));
+        } catch (SAXException e) {
+            throw new BusinessRuleViolationException(
+                "Generated SAF-T XML failed schema validation: " + e.getMessage()
+            );
+        } catch (IOException e) {
+            throw new RuntimeException("Error during XML validation", e);
+        }
     }
     
     /**

@@ -613,7 +613,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Generate XML according to SAF-T PT schema
     - _Requirements: 17.1, 17.2_
   
-  - [ ] 21.2 Implement XML schema validation
+  - [x] 21.2 Implement XML schema validation
     - Load SAF-T PT XSD schema
     - Validate generated XML before returning
     - _Requirements: 17.3_
