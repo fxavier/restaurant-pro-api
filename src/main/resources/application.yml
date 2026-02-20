@@ -64,13 +64,51 @@ management:
     web:
       exposure:
         include: health,metrics,info
+      base-path: /actuator
   endpoint:
     health:
       show-details: when-authorized
+      show-components: when-authorized
+    metrics:
+      enabled: true
+  health:
+    defaults:
+      enabled: true
+    db:
+      enabled: true
+    diskspace:
+      enabled: true
   metrics:
     export:
       simple:
         enabled: true
+    enable:
+      # HTTP metrics
+      http.server.requests: true
+      # JVM metrics
+      jvm.memory.used: true
+      jvm.memory.max: true
+      jvm.gc.pause: true
+      # Database connection pool metrics
+      hikaricp.connections: true
+      hikaricp.connections.active: true
+      hikaricp.connections.idle: true
+      hikaricp.connections.pending: true
+      hikaricp.connections.max: true
+      hikaricp.connections.min: true
+      hikaricp.connections.timeout: true
+      # System metrics
+      system.cpu.usage: true
+      process.cpu.usage: true
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      percentiles:
+        http.server.requests: 0.5, 0.95, 0.99
+      slo:
+        http.server.requests: 100ms, 500ms, 1s, 2s
 
 # Server configuration
 server:

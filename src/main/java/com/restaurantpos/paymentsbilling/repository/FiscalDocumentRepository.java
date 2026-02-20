@@ -110,4 +110,17 @@ public interface FiscalDocumentRepository extends JpaRepository<FiscalDocument, 
      */
     boolean existsByTenantIdAndSiteIdAndDocumentTypeAndDocumentNumber(
         UUID tenantId, UUID siteId, DocumentType documentType, String documentNumber);
+
+
+    /**
+     * Finds all fiscal documents for a tenant within a date range.
+     * Used for SAF-T export.
+     *
+     * @param tenantId the tenant ID
+     * @param startDate the start date
+     * @param endDate the end date
+     * @return list of fiscal documents
+     */
+    List<FiscalDocument> findByTenantIdAndIssuedAtBetween(UUID tenantId, Instant startDate, Instant endDate);
+
 }

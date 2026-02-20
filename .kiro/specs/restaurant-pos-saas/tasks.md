@@ -540,7 +540,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - Limit: 5 attempts per minute
     - _Requirements: 13.4_
   
-  - [ ] 18.4 Implement CSRF protection
+  - [x] 18.4 Implement CSRF protection
     - Configure Spring Security CSRF for state-changing operations
     - Exclude /api/auth/** from CSRF (stateless JWT)
     - _Requirements: 13.6_
@@ -562,24 +562,24 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Validates: Requirements 13.6**
 
 - [ ] 19. Observability and monitoring
-  - [ ] 19.1 Configure structured logging
+  - [x] 19.1 Configure structured logging
     - Configure Logback with JSON encoder
     - Add MDC fields: tenant_id, user_id, trace_id
     - Create LoggingFilter to populate MDC from request context
     - _Requirements: 14.1, 14.2, 14.6_
   
-  - [ ] 19.2 Implement API request logging
+  - [x] 19.2 Implement API request logging
     - Create RequestLoggingFilter to log all API requests
     - Log: method, path, status_code, duration_ms, tenant_id
     - _Requirements: 14.2_
   
-  - [ ] 19.3 Configure Micrometer metrics
+  - [x] 19.3 Configure Micrometer metrics
     - Add Micrometer dependencies
     - Expose metrics endpoint: /actuator/metrics
     - Configure metrics: request rates, error rates, response times, DB connection pool
     - _Requirements: 14.3_
   
-  - [ ] 19.4 Implement health checks
+  - [x] 19.4 Implement health checks
     - Configure Spring Boot Actuator
     - Add custom health indicators: database connectivity, disk space
     - Expose /actuator/health endpoint
@@ -597,7 +597,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
     - **Property 49: Correlation ID Propagation**
     - **Validates: Requirements 14.6**
 
-- [ ] 20. Checkpoint - Robustness complete
+- [x] 20. Checkpoint - Robustness complete
   - Ensure all tests pass
   - Verify error handling returns proper Problem Details format
   - Verify logs are in JSON format with all required fields
@@ -607,7 +607,7 @@ Each task builds on previous work, with checkpoints to ensure stability. Propert
 ### Phase 5: Integrations and Advanced Features
 
 - [ ] 21. SAF-T PT fiscal export (optional)
-  - [ ] 21.1 Implement SAF-T export service
+  - [x] 21.1 Implement SAF-T export service
     - Create SaftExportService with generateExport(tenantId, startDate, endDate) method
     - Query all fiscal documents, payments, customers, items in date range
     - Generate XML according to SAF-T PT schema
