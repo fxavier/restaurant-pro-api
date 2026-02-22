@@ -164,6 +164,68 @@ The application provides interactive API documentation using Swagger UI:
 
 Most API endpoints require JWT authentication. To authenticate:
 
+#### Super Admin Setup (First Time Only)
+
+For initial system setup, register a super admin account. Super admins can create tenants and have system-wide access:
+
+```bash
+curl -X POST http://localhost:8080/api/super-admin/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "superadmin",
+    "password": "SuperSecurePassword123!",
+    "email": "admin@example.com"
+  }'
+```
+
+Response:
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIs...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIs...",
+  "userId": "uuid",
+  "username": "superadmin",
+  "tenantId": null,
+  "role": "SUPER_ADMIN"
+}
+```
+
+**Super Admin Login:**
+
+```bash
+curl -X POST http://localhost:8080/api/super-admin/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "superadmin",
+    "password": "SuperSecurePassword123!"
+  }'
+```
+
+**Create a Tenant (Super Admin Only):**
+
+```bash
+curl -X POST http://localhost:8080/api/super-admin/tenants \
+  -H "Authorization: Bearer <super-admin-token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "My Restaurant",
+    "subscriptionPlan": "PREMIUM"
+  }'
+```
+
+Response:
+```json
+{
+  "id": "uuid",
+  "name": "My Restaurant",
+  "subscriptionPlan": "PREMIUM",
+  "status": "ACTIVE",
+  "createdAt": "2024-01-01T00:00:00Z"
+}
+```
+
+#### Regular User Authentication
+
 1. **Register** a new account (if you don't have one):
 
 ```bash
@@ -224,6 +286,11 @@ curl -X GET http://localhost:8080/api/tables \
 ```
 
 ### Key API Endpoints
+
+#### Super Admin
+- `POST /api/super-admin/register` - Register super admin account
+- `POST /api/super-admin/login` - Super admin login
+- `POST /api/super-admin/tenants` - Create new tenant (requires super admin token)
 
 #### Authentication
 - `POST /api/auth/register` - Register new account

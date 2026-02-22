@@ -1,9 +1,10 @@
 package com.restaurantpos.identityaccess.entity;
 
-import com.restaurantpos.identityaccess.model.Role;
-import com.restaurantpos.identityaccess.model.UserStatus;
 import java.time.Instant;
 import java.util.UUID;
+
+import com.restaurantpos.identityaccess.model.Role;
+import com.restaurantpos.identityaccess.model.UserStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +30,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     
-    @Column(name = "tenant_id", nullable = false)
+    @Column(name = "tenant_id", nullable = true)
     private UUID tenantId;
     
     @Column(nullable = false, length = 100)
@@ -140,5 +141,12 @@ public class User {
      */
     public boolean isActive() {
         return status == UserStatus.ACTIVE;
+    }
+    
+    /**
+     * Checks if the user is a super admin with system-wide access.
+     */
+    public boolean isSuperAdmin() {
+        return role == Role.SUPER_ADMIN;
     }
 }

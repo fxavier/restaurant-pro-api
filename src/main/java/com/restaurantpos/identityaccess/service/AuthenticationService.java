@@ -1,12 +1,5 @@
 package com.restaurantpos.identityaccess.service;
 
-import com.restaurantpos.identityaccess.dto.AuthResponse;
-import com.restaurantpos.identityaccess.entity.RefreshToken;
-import com.restaurantpos.identityaccess.entity.User;
-import com.restaurantpos.identityaccess.exception.AuthenticationException;
-import com.restaurantpos.identityaccess.repository.RefreshTokenRepository;
-import com.restaurantpos.identityaccess.repository.UserRepository;
-import com.restaurantpos.identityaccess.security.JwtTokenProvider;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -22,6 +15,14 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.restaurantpos.identityaccess.dto.AuthResponse;
+import com.restaurantpos.identityaccess.entity.RefreshToken;
+import com.restaurantpos.identityaccess.entity.User;
+import com.restaurantpos.identityaccess.exception.AuthenticationException;
+import com.restaurantpos.identityaccess.repository.RefreshTokenRepository;
+import com.restaurantpos.identityaccess.repository.UserRepository;
+import com.restaurantpos.identityaccess.security.JwtTokenProvider;
 
 /**
  * Service for user authentication operations.
@@ -105,6 +106,68 @@ public class AuthenticationService {
                 user.getId(),
                 user.getUsername(),
                 user.getTenantId(),
+                user.getRole().name()
+        );
+    }
+    
+    /**
+     * Authenticates a super admin and generates access and refresh tokens.
+     * Super admins are not bound to any tenant.
+     * 
+     * @param username the username
+     * @param password the password
+     * @return authentication response with tokens
+     * @throws AuthenticationException if authentication fails
+     */
+    public AuthResponse loginSuperAdmin(String username, String password) {
+        logger.debug("Super admin login attempt for user: {}", username);
+        
+        // Find super admin user (tenant_id is null)
+        User user = userRepository.findByTenantIdAndUsername(null, username)
+                .orElseThrow(() -> new AuthenticationException("Invalid username or password"));
+        
+        // Verify it's actually a super admin
+        if (!user.isSuperAdmin()) {
+            logger.warn("Login attempt with non-super-admin credentials: {}", username);
+            throw new AuthenticationException("Invalid username or password");
+        }
+        
+        // Check if user is active
+        if (!user.isActive()) {
+            logger.warn("Login attempt for inactive super admin: {}", username);
+            throw new AuthenticationException("User account is inactive");
+        }
+        
+        // Verify password
+        if (!passwordEncoder.matches(password, user.getPasswordHash())) {
+            logger.warn("Invalid password for super admin: {}", username);
+            throw new AuthenticationException("Invalid username or password");
+        }
+        
+        // Generate tokens
+        String accessToken = jwtTokenProvider.generateAccessToken(
+                user.getId(),
+                user.getUsername(),
+                null, // No tenant for super admin
+                user.getRole().name()
+        );
+        
+        String refreshToken = jwtTokenProvider.generateRefreshToken(
+                user.getId(),
+                null // No tenant for super admin
+        );
+        
+        // Store refresh token
+        storeRefreshToken(user.getId(), refreshToken);
+        
+        logger.info("Super admin logged in successfully: {}", username);
+        
+        return new AuthResponse(
+                accessToken,
+                refreshToken,
+                user.getId(),
+                user.getUsername(),
+                null, // No tenant for super admin
                 user.getRole().name()
         );
     }
@@ -235,6 +298,12 @@ public class AuthenticationService {
             throw new AuthenticationException("Invalid role specified");
         }
         
+        // Prevent registration as SUPER_ADMIN through regular registration
+        if (userRole == com.restaurantpos.identityaccess.model.Role.SUPER_ADMIN) {
+            logger.warn("Registration failed: cannot register as SUPER_ADMIN through regular registration");
+            throw new AuthenticationException("Invalid role specified");
+        }
+        
         // Hash password
         String passwordHash = passwordEncoder.encode(password);
         
@@ -266,6 +335,68 @@ public class AuthenticationService {
                 user.getId(),
                 user.getUsername(),
                 user.getTenantId(),
+                user.getRole().name()
+        );
+    }
+    
+    /**
+     * Registers a new super admin account.
+     * Super admins are not bound to any tenant and have system-wide access.
+     * 
+     * @param username the username
+     * @param password the password
+     * @param email the email address
+     * @return authentication response with tokens
+     * @throws AuthenticationException if registration fails
+     */
+    public AuthResponse registerSuperAdmin(String username, String password, String email) {
+        logger.debug("Super admin registration attempt for user: {}", username);
+        
+        // Check if username already exists (globally for super admins)
+        if (userRepository.findByTenantIdAndUsername(null, username).isPresent()) {
+            logger.warn("Super admin registration failed: username already exists: {}", username);
+            throw new AuthenticationException("Username already exists");
+        }
+        
+        // Validate email uniqueness if provided
+        if (email != null && !email.isBlank()) {
+            if (userRepository.findByTenantIdAndEmail(null, email).isPresent()) {
+                logger.warn("Super admin registration failed: email already exists: {}", email);
+                throw new AuthenticationException("Email already exists");
+            }
+        }
+        
+        // Hash password
+        String passwordHash = passwordEncoder.encode(password);
+        
+        // Create super admin user (tenant_id is null)
+        User user = new User(null, username, passwordHash, email, com.restaurantpos.identityaccess.model.Role.SUPER_ADMIN);
+        user = userRepository.save(user);
+        
+        logger.info("Super admin registered successfully: {}", username);
+        
+        // Generate tokens for immediate login
+        String accessToken = jwtTokenProvider.generateAccessToken(
+                user.getId(),
+                user.getUsername(),
+                null, // No tenant for super admin
+                user.getRole().name()
+        );
+        
+        String refreshToken = jwtTokenProvider.generateRefreshToken(
+                user.getId(),
+                null // No tenant for super admin
+        );
+        
+        // Store refresh token
+        storeRefreshToken(user.getId(), refreshToken);
+        
+        return new AuthResponse(
+                accessToken,
+                refreshToken,
+                user.getId(),
+                user.getUsername(),
+                null, // No tenant for super admin
                 user.getRole().name()
         );
     }
