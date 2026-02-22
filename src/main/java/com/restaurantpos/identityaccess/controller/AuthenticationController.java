@@ -84,6 +84,28 @@ public class AuthenticationController {
     }
     
     /**
+     * Registers a new user account.
+     * 
+     * POST /api/auth/register
+     */
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+        try {
+            AuthResponse response = authenticationService.register(
+                    request.tenantId(),
+                    request.username(),
+                    request.password(),
+                    request.email(),
+                    request.role()
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (AuthenticationException e) {
+            logger.warn("Registration failed: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+    
+    /**
      * Request DTO for login.
      */
     public record LoginRequest(
@@ -112,5 +134,27 @@ public class AuthenticationController {
     public record LogoutRequest(
             @NotBlank(message = "Refresh token is required")
             String refreshToken
+    ) {}
+    
+    /**
+     * Request DTO for registration.
+     */
+    public record RegisterRequest(
+            @NotNull(message = "Tenant ID is required")
+            UUID tenantId,
+            
+            @NotBlank(message = "Username is required")
+            @Size(min = 3, max = 100, message = "Username must be between 3 and 100 characters")
+            String username,
+            
+            @NotBlank(message = "Password is required")
+            @Size(min = 8, message = "Password must be at least 8 characters")
+            String password,
+            
+            @Size(max = 255, message = "Email must not exceed 255 characters")
+            String email,
+            
+            @NotBlank(message = "Role is required")
+            String role
     ) {}
 }

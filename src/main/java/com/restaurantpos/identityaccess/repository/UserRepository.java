@@ -1,14 +1,15 @@
 package com.restaurantpos.identityaccess.repository;
 
-import com.restaurantpos.identityaccess.entity.User;
-import com.restaurantpos.identityaccess.model.Role;
-import com.restaurantpos.identityaccess.model.UserStatus;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.restaurantpos.identityaccess.entity.User;
+import com.restaurantpos.identityaccess.model.Role;
+import com.restaurantpos.identityaccess.model.UserStatus;
 
 /**
  * Repository for User entity with tenant filtering.
@@ -62,4 +63,13 @@ public interface UserRepository extends JpaRepository<User, UUID> {
      * @return true if the username exists
      */
     boolean existsByTenantIdAndUsername(UUID tenantId, String username);
+    
+    /**
+     * Finds a user by tenant ID and email.
+     * 
+     * @param tenantId the tenant ID
+     * @param email the email address
+     * @return the user if found
+     */
+    Optional<User> findByTenantIdAndEmail(UUID tenantId, String email);
 }

@@ -164,14 +164,17 @@ The application provides interactive API documentation using Swagger UI:
 
 Most API endpoints require JWT authentication. To authenticate:
 
-1. **Login** to get JWT tokens:
+1. **Register** a new account (if you don't have one):
 
 ```bash
-curl -X POST http://localhost:8080/api/auth/login \
+curl -X POST http://localhost:8080/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
-    "username": "admin",
-    "password": "password"
+    "tenantId": "00000000-0000-0000-0000-000000000001",
+    "username": "myusername",
+    "password": "SecurePassword123!",
+    "email": "user@example.com",
+    "role": "WAITER"
   }'
 ```
 
@@ -180,11 +183,40 @@ Response:
 {
   "accessToken": "eyJhbGciOiJIUzI1NiIs...",
   "refreshToken": "eyJhbGciOiJIUzI1NiIs...",
+  "userId": "uuid",
+  "username": "myusername",
+  "tenantId": "uuid",
+  "role": "WAITER",
   "expiresIn": 900
 }
 ```
 
-2. **Use the access token** in subsequent requests:
+2. **Login** to get JWT tokens (if you already have an account):
+
+```bash
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tenantId": "00000000-0000-0000-0000-000000000001",
+    "username": "myusername",
+    "password": "SecurePassword123!"
+  }'
+```
+
+Response:
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIs...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIs...",
+  "userId": "uuid",
+  "username": "myusername",
+  "tenantId": "uuid",
+  "role": "WAITER",
+  "expiresIn": 900
+}
+```
+
+3. **Use the access token** in subsequent requests:
 
 ```bash
 curl -X GET http://localhost:8080/api/tables \
@@ -194,6 +226,7 @@ curl -X GET http://localhost:8080/api/tables \
 ### Key API Endpoints
 
 #### Authentication
+- `POST /api/auth/register` - Register new account
 - `POST /api/auth/login` - Authenticate user
 - `POST /api/auth/refresh` - Refresh access token
 - `POST /api/auth/logout` - Logout user

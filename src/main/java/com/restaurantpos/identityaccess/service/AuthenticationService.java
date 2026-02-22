@@ -199,6 +199,78 @@ public class AuthenticationService {
     }
     
     /**
+     * Registers a new user account.
+     * 
+     * @param tenantId the tenant ID
+     * @param username the username
+     * @param password the password
+     * @param email the email address
+     * @param role the user role
+     * @return authentication response with tokens
+     * @throws AuthenticationException if registration fails
+     */
+    public AuthResponse register(UUID tenantId, String username, String password, String email, String role) {
+        logger.debug("Registration attempt for user: {} in tenant: {}", username, tenantId);
+        
+        // Check if username already exists for this tenant
+        if (userRepository.findByTenantIdAndUsername(tenantId, username).isPresent()) {
+            logger.warn("Registration failed: username already exists: {}", username);
+            throw new AuthenticationException("Username already exists");
+        }
+        
+        // Validate email uniqueness if provided
+        if (email != null && !email.isBlank()) {
+            if (userRepository.findByTenantIdAndEmail(tenantId, email).isPresent()) {
+                logger.warn("Registration failed: email already exists: {}", email);
+                throw new AuthenticationException("Email already exists");
+            }
+        }
+        
+        // Parse and validate role
+        com.restaurantpos.identityaccess.model.Role userRole;
+        try {
+            userRole = com.restaurantpos.identityaccess.model.Role.valueOf(role.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            logger.warn("Registration failed: invalid role: {}", role);
+            throw new AuthenticationException("Invalid role specified");
+        }
+        
+        // Hash password
+        String passwordHash = passwordEncoder.encode(password);
+        
+        // Create user
+        User user = new User(tenantId, username, passwordHash, email, userRole);
+        user = userRepository.save(user);
+        
+        logger.info("User registered successfully: {} in tenant: {}", username, tenantId);
+        
+        // Generate tokens for immediate login
+        String accessToken = jwtTokenProvider.generateAccessToken(
+                user.getId(),
+                user.getUsername(),
+                user.getTenantId(),
+                user.getRole().name()
+        );
+        
+        String refreshToken = jwtTokenProvider.generateRefreshToken(
+                user.getId(),
+                user.getTenantId()
+        );
+        
+        // Store refresh token
+        storeRefreshToken(user.getId(), refreshToken);
+        
+        return new AuthResponse(
+                accessToken,
+                refreshToken,
+                user.getId(),
+                user.getUsername(),
+                user.getTenantId(),
+                user.getRole().name()
+        );
+    }
+    
+    /**
      * Revokes all refresh tokens for a user.
      * Used for security events like password change.
      * 

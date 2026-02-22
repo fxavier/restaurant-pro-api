@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,6 +40,15 @@ import com.restaurantpos.identityaccess.tenant.TenantContextFilter;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
+    private static final String[] SWAGGER_WHITELIST = {
+        "/swagger-ui.html",
+        "/swagger-ui/**",
+        "/v3/api-docs/**",
+        "/v3/api-docs.yaml",
+        "/swagger-resources/**",
+        "/webjars/**"
+    };
     
     private final TenantContextFilter tenantContextFilter;
     private final RateLimitingFilter rateLimitingFilter;
@@ -84,6 +94,7 @@ public class SecurityConfig {
                 // Public endpoints
                 .requestMatchers("/api/auth/login", "/api/auth/refresh").permitAll()
                 .requestMatchers("/actuator/health", "/actuator/info", "/actuator/metrics", "/actuator/metrics/**").permitAll()
+                .requestMatchers(SWAGGER_WHITELIST).permitAll()
                 .requestMatchers("/error").permitAll()
                 
                 // All other endpoints require authentication
@@ -109,6 +120,15 @@ public class SecurityConfig {
             .addFilterAfter(loggingFilter, TenantContextFilter.class);
         
         return http.build();
+    }
+
+    /**
+     * Bypass security filters entirely for Swagger/OpenAPI resources.
+     * This avoids auth challenges on API docs static resources.
+     */
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers(SWAGGER_WHITELIST);
     }
     
     /**
