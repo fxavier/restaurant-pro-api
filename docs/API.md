@@ -11,7 +11,48 @@ This document provides detailed information about the REST API endpoints availab
 
 ## Authentication
 
-All API endpoints (except `/api/auth/login`) require JWT authentication.
+All API endpoints (except `/api/auth/login` and `/api/auth/register`) require JWT authentication.
+
+### Registering a New Account
+
+**Endpoint**: `POST /api/auth/register`
+
+**Request Body**:
+```json
+{
+  "tenantId": "uuid",
+  "username": "string",
+  "password": "string",
+  "email": "string (optional)",
+  "role": "string"
+}
+```
+
+**Validation Rules**:
+- `tenantId`: Required, must be a valid UUID
+- `username`: Required, 3-100 characters, must be unique within tenant
+- `password`: Required, minimum 8 characters
+- `email`: Optional, maximum 255 characters, must be unique within tenant if provided
+- `role`: Required, must be one of: ADMIN, MANAGER, CASHIER, WAITER, KITCHEN_STAFF
+
+**Response**:
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIs...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIs...",
+  "userId": "uuid",
+  "username": "string",
+  "tenantId": "uuid",
+  "role": "string",
+  "expiresIn": 900
+}
+```
+
+**Notes**:
+- Registration automatically logs in the user and returns tokens
+- Passwords are hashed using BCrypt before storage
+- Usernames must be unique per tenant (same username can exist in different tenants)
+- Email addresses must be unique per tenant if provided
 
 ### Obtaining a Token
 
@@ -65,6 +106,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 - **Request Body**:
   ```json
   {
+    "tenantId": "uuid",
     "username": "string",
     "password": "string"
   }
@@ -74,9 +116,43 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
   {
     "accessToken": "string",
     "refreshToken": "string",
+    "userId": "uuid",
+    "username": "string",
+    "tenantId": "uuid",
+    "role": "string",
     "expiresIn": 900
   }
   ```
+
+#### Register
+- **POST** `/api/auth/register`
+- **Description**: Register a new user account
+- **Authentication**: Not required
+- **Request Body**:
+  ```json
+  {
+    "tenantId": "uuid",
+    "username": "string (3-100 characters)",
+    "password": "string (min 8 characters)",
+    "email": "string (optional, max 255 characters)",
+    "role": "ADMIN|MANAGER|CASHIER|WAITER|KITCHEN_STAFF"
+  }
+  ```
+- **Response**: `201 Created`
+  ```json
+  {
+    "accessToken": "string",
+    "refreshToken": "string",
+    "userId": "uuid",
+    "username": "string",
+    "tenantId": "uuid",
+    "role": "string",
+    "expiresIn": 900
+  }
+  ```
+- **Error Responses**:
+  - `400 Bad Request` - Validation error, username/email already exists, or invalid role
+  - `422 Unprocessable Entity` - Business rule violation
 
 #### Refresh Token
 - **POST** `/api/auth/refresh`
