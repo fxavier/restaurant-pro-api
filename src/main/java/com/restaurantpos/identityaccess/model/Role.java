@@ -10,8 +10,22 @@ import java.util.Set;
  */
 public enum Role {
     /**
-     * System administrator with full access to all features.
-     * Has all permissions in the system.
+     * Super administrator with system-wide access across all tenants.
+     * Can create tenants and has all permissions in the system.
+     * Not bound to a specific tenant.
+     */
+    SUPER_ADMIN(Set.of(
+        Permission.VOID_AFTER_SUBTOTAL,
+        Permission.APPLY_DISCOUNT,
+        Permission.REPRINT_DOCUMENT,
+        Permission.REDIRECT_PRINTER,
+        Permission.CLOSE_CASH,
+        Permission.VOID_INVOICE
+    )),
+    
+    /**
+     * System administrator with full access to all features within a tenant.
+     * Has all permissions in the system for their tenant.
      */
     ADMIN(Set.of(
         Permission.VOID_AFTER_SUBTOTAL,
@@ -81,5 +95,14 @@ public enum Role {
      */
     public boolean hasPermission(Permission permission) {
         return permissions.contains(permission);
+    }
+    
+    /**
+     * Check if this role is a super admin with system-wide access.
+     * 
+     * @return true if the role is SUPER_ADMIN, false otherwise
+     */
+    public boolean isSuperAdmin() {
+        return this == SUPER_ADMIN;
     }
 }

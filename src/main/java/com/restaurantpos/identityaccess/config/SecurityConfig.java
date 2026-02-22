@@ -78,7 +78,7 @@ public class SecurityConfig {
             // Configure CSRF protection
             // Exclude stateless JWT authentication endpoints and monitoring endpoints
             .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/auth/**", "/actuator/**")
+                .ignoringRequestMatchers("/api/auth/**", "/api/super-admin/**", "/actuator/**")
             )
             
             // Configure CORS
@@ -92,7 +92,8 @@ public class SecurityConfig {
             // Configure authorization rules
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
-                .requestMatchers("/api/auth/login", "/api/auth/refresh").permitAll()
+                .requestMatchers("/api/auth/login", "/api/auth/refresh", "/api/auth/register").permitAll()
+                .requestMatchers("/api/super-admin/register", "/api/super-admin/login").permitAll()
                 .requestMatchers("/actuator/health", "/actuator/info", "/actuator/metrics", "/actuator/metrics/**").permitAll()
                 .requestMatchers(SWAGGER_WHITELIST).permitAll()
                 .requestMatchers("/error").permitAll()
