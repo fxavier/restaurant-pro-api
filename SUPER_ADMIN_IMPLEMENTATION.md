@@ -144,6 +144,62 @@ Content-Type: application/json
 
 ## Testing
 
+### Manual Testing Results ✅
+
+All super admin endpoints have been tested and verified:
+
+1. **Super Admin Registration** (`POST /api/super-admin/register`)
+   ```bash
+   curl -X POST http://localhost:8080/api/super-admin/register \
+     -H "Content-Type: application/json" \
+     -d '{"username":"admin","password":"admin2026","email":"admin@email.com"}'
+   ```
+   - ✅ Successfully creates super admin with `tenant_id = NULL`
+   - ✅ Returns JWT tokens with no `tenant_id` claim
+   - ✅ Returns HTTP 201 Created
+
+2. **Super Admin Login** (`POST /api/super-admin/login`)
+   ```bash
+   curl -X POST http://localhost:8080/api/super-admin/login \
+     -H "Content-Type: application/json" \
+     -d '{"username":"admin","password":"admin2026"}'
+   ```
+   - ✅ Successfully authenticates super admin
+   - ✅ Returns JWT tokens with `SUPER_ADMIN` role
+   - ✅ Returns HTTP 200 OK
+
+3. **Create Tenant** (`POST /api/super-admin/tenants`)
+   ```bash
+   curl -X POST http://localhost:8080/api/super-admin/tenants \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Bearer <token>" \
+     -d '{"name":"Test Restaurant","subscriptionPlan":"PREMIUM"}'
+   ```
+   - ✅ Successfully creates new tenant with super admin authorization
+   - ✅ Requires valid super admin JWT token
+   - ✅ Returns HTTP 201 Created
+
+### Database Verification
+
+```sql
+SELECT id, username, email, role, tenant_id, status 
+FROM users 
+WHERE role = 'SUPER_ADMIN';
+```
+
+Result:
+```
+                  id                  | username |      email      |    role     | tenant_id | status 
+--------------------------------------+----------+-----------------+-------------+-----------+--------
+ 98891168-3cc3-4a92-8b91-ca2c0cd3aa6f | admin    | admin@email.com | SUPER_ADMIN |           | ACTIVE
+```
+
+✅ Super admin correctly stored with `tenant_id = NULL`
+
+### Integration Tests
+
+TODO: Add automated integration tests for super admin functionality
+
 To test the implementation:
 
 1. Start the application

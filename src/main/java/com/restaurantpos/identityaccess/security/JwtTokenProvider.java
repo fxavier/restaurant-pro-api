@@ -52,7 +52,7 @@ public class JwtTokenProvider {
      * 
      * @param userId the user ID
      * @param username the username
-     * @param tenantId the tenant ID
+     * @param tenantId the tenant ID (null for super admins)
      * @param role the user role
      * @return the generated JWT access token
      */
@@ -60,17 +60,21 @@ public class JwtTokenProvider {
         Instant now = Instant.now();
         Instant expiry = now.plus(accessTokenExpiryMinutes, ChronoUnit.MINUTES);
         
-        JwtClaimsSet claims = JwtClaimsSet.builder()
+        JwtClaimsSet.Builder claimsBuilder = JwtClaimsSet.builder()
                 .issuer("restaurant-pos-saas")
                 .issuedAt(now)
                 .expiresAt(expiry)
                 .subject(userId.toString())
                 .claim("username", username)
-                .claim(TENANT_ID_CLAIM, tenantId.toString())
                 .claim("role", role)
-                .claim(TOKEN_TYPE_CLAIM, ACCESS_TOKEN_TYPE)
-                .build();
+                .claim(TOKEN_TYPE_CLAIM, ACCESS_TOKEN_TYPE);
         
+        // Only add tenant_id claim if not null (super admins have no tenant)
+        if (tenantId != null) {
+            claimsBuilder.claim(TENANT_ID_CLAIM, tenantId.toString());
+        }
+        
+        JwtClaimsSet claims = claimsBuilder.build();
         JwsHeader header = JwsHeader.with(MacAlgorithm.HS256).build();
         
         return jwtEncoder.encode(JwtEncoderParameters.from(header, claims)).getTokenValue();
@@ -81,22 +85,26 @@ public class JwtTokenProvider {
      * Refresh tokens expire after 7 days.
      * 
      * @param userId the user ID
-     * @param tenantId the tenant ID
+     * @param tenantId the tenant ID (null for super admins)
      * @return the generated JWT refresh token
      */
     public String generateRefreshToken(UUID userId, UUID tenantId) {
         Instant now = Instant.now();
         Instant expiry = now.plus(refreshTokenExpiryDays, ChronoUnit.DAYS);
         
-        JwtClaimsSet claims = JwtClaimsSet.builder()
+        JwtClaimsSet.Builder claimsBuilder = JwtClaimsSet.builder()
                 .issuer("restaurant-pos-saas")
                 .issuedAt(now)
                 .expiresAt(expiry)
                 .subject(userId.toString())
-                .claim(TENANT_ID_CLAIM, tenantId.toString())
-                .claim(TOKEN_TYPE_CLAIM, REFRESH_TOKEN_TYPE)
-                .build();
+                .claim(TOKEN_TYPE_CLAIM, REFRESH_TOKEN_TYPE);
         
+        // Only add tenant_id claim if not null (super admins have no tenant)
+        if (tenantId != null) {
+            claimsBuilder.claim(TENANT_ID_CLAIM, tenantId.toString());
+        }
+        
+        JwtClaimsSet claims = claimsBuilder.build();
         JwsHeader header = JwsHeader.with(MacAlgorithm.HS256).build();
         
         return jwtEncoder.encode(JwtEncoderParameters.from(header, claims)).getTokenValue();
