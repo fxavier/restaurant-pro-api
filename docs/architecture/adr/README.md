@@ -49,6 +49,13 @@ Each ADR follows this structure:
   - **Summary**: Use optimistic locking with version columns on critical entities to handle concurrent modifications without blocking.
   - **Key Decision**: Optimistic locking over pessimistic locking or no locking
 
+### Future Considerations
+
+- [ADR-0005: API Versioning - Future Consideration](./0005-api-versioning-future-consideration.md)
+  - **Status**: Proposed (Not Implemented)
+  - **Summary**: Document API versioning strategy for future implementation when breaking changes are needed. Current API remains unversioned.
+  - **Key Decision**: URL-based versioning (`/api/v1/`) when implemented
+
 ## Creating New ADRs
 
 When making a significant architectural decision:

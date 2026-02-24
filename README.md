@@ -598,7 +598,7 @@ Proprietary - All rights reserved
 ## Support
 
 For questions or issues, contact:
-- Email: support@restaurantpos.com
+- Email: xavierfrancisco353@@gmail.com
 - Documentation: [docs/](docs/)
 - Architecture Decisions: [docs/architecture/adr/](docs/architecture/adr/)
 
